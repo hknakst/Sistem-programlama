@@ -104,11 +104,11 @@ Komut satırı tepki vermiyorsa bir işlemi icra ediyor ve bir problem olmuş ol
 
 kesme gönderir, süreci keser.
 
--ctrl + z
+- ctrl + z
 
 sürecin icrasını durdurur.
 
--ps 
+- ps 
 
 ps komutu sistem üzerinde çalışan süreçleri görebilmenizi sağlar. Bunların arasından süreç kontrolü, süreç sorumlusu, süreç numarası, çalıştırılan komut, zaman, cpu, bellek gibi birçok bilgi görebilirsiniz.
 
