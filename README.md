@@ -123,3 +123,105 @@ fg komutu: Bu komut sistem üzerinde durmakta olan bir süreci yada görevi ön 
 terminali kapatır(logout).
 
 
+## Bölüm-2 Unix dosya sistemi
+
+Dosya sistemi, makinenizdeki fiziksel depolama(diskler) , diğer makinelerdeki depolama (NFS), giriş/çıkış cihazları ve benzeri durumlar için sizin arayüzünüzdür. </br>
+Unix'de herşey bir dosyadır.(porgramlar, text dosyaları, çevre birimleri, terminaller...) </br>
+Dizinler diğer dosyaları içeren(referanslara) bir dosyadır. </br>
+Unix'de sürücü harfleri yoktur.Dosya sistemi, depolama aygıtlarına mantıksal bir görünüm sağlar. </br>
+
+### Çalışma dizini(working directory) </br>
+Çalışma dizini: dosya sisteminin geçerli konumu yani sistemdeki konumunuz.
+- pwd komutu  </br>
+
+pwd (print working directory) komutu çalışma dizininizin mutlak yolunu (daha sonra) verir.
+Başka bir dizin belirtmediğiniz sürece, bir komut çalışma dizini içerisinde çalışmak istediğinizi varsayar.
+
+### Başlangıç(ana) Dizini(home directory) </br>
+Ana dizin: kişisel kullanıcı alanı.
+Oturum açıldığında, çalışma dizininiz ana dizininize ayarlanacaktır.
+Ana dizininize giden yol, ~ (tilde) sembolüyle belirtilebilir.
+Kullanıcı1'in ana dizini ~ kullanıcı1 şeklinde belirtilebilir.
+Başka bir dizindeysek cd ~/ komutunu vererek ana dizine gidebiliriz.
+
+### Unix Dosyası Hiyerarşisi
+ (foto)
+ 
+Kök dizini(Root directory) : / , bütün dosyalar root'a bağlanır.
+Dizinler düz dosyalar veya başka dizinler içerebilir.
+Sonuç, dosya sistemi bir ağaç yapısıdır.
+Unix, herhangi özel bir dosya adı uzantısını tanımıyor.
+
+### Unix yolları (Unix paths)
+
+Dizinler / ile ayrılır.
+Absolute path(tam yol): Root(kök)'dan başlayarak ağacın takip edildiği yoldur.Örneğin: </br>
+/home/user1/textfile </br>
+~user1/textfile </br>
+~/textfile </br>
+Absolute path kullanıcı dizini referans alınarak bildirim yapar. 
+
+Relative path(göreceli yol): çalışma dizininden başlar. </br>
+- ..  bir üst dizindir(parent)
+- .  çalışma dizinidir(yani dizinin kendisini ifade eder.
+textfile </br>
+bil318/lec1.txt </br>
+çalışma dizinini referans alma : ./../textfile </br>
+parent'ı referans alma : ../textfile </br>
+
+### Bazı standart dizinler
+
+Bu dizinler / yani root altındadır. </br>
+/ bin - standart komutlar ve yardımcı programlar; yürütülebilir.Kullanıcının koşabildiği tüm programlar bu dizindedir. </br>
+/ sbin - root tarafından icra edilebilen programlar, sistem komutları ve yardımcı programları (önyükleme için gerekli) bulunur </br>
+/ dev - blok ve karakter aygıtı dizini.Dosya linleri yazıcı,cdrom sürücü tanımlamaları bu dizin altındadır.Terminale tty komutunu verirsek bizim kullandığımız terminal device numarasını verir </br>
+/ etc - ana bilgisayara özgü yapılandırma; host hizmetleri </br>
+/ home - kullanıcıların ana dizinleri.Kullanıcının login ismiyle dizinler açılır (home/hakan)</br>
+/ lib - çeşitli diller için kütüphane dizini.(.so unix dosyaları , .dll windows dosyaları)</br>
+/ tmp - geçici dosyalar.(veritabanında taplo update ,update set işlemlerinde tmp kullanılır) </br>
+/ usr - kullanıcı yardımcı programları ve uygulamaları; / Usr / local /. Kurulumda değil daha sonra sisteme dahil olan programlardır olsada olur olmasada.</br>
+/ var - çeşitli log işlemleri,değişken olan sistem dosyaları için bu dizin kullanılır (günlükler, makaralar, e-posta)
+
+
+### Dizin değiştirme (changing directories) </br>
+
+- cd komutu </br>
+
+Çalışma dizinini değiştirmek için kullanılır. cd <dizin yolu> şeklinde kullanılır. Absolute veya relative yollar kullanılabilir. </br>
+Herhangi bir argüman verilmezse cd ~ komutu verilmiş varsayılır ve home dizinine gidilir.Eğer .. parametresi verilirse bir üst dizin . parametresi verilirse de mevcut çalışma dizinine gidilir. </br> 
+cd /home/user1
+cd ../../user1
+
+### Dosya bilgisi (ls -al) </br>
+
+(foto)
+
+### Dosya türleri 
+
+Plain (düz) (-): çoğu dosya bu türdedir, ikili veya metin dosyaları. </br>
+Directory (dizin) (d): bir dosya kümesini gösterir </br>
+Symbolic (sembolik) link (l): Başka bir dosya veya dizine işaretçi(pointer).</br>
+Özel dosyalar </br>
+      Karakter cihazı (c): klavye, yazıcı, joystick.</br>
+      Block cihazı (b): disk, CD-ROM.</br>
+İletişim dosyaları</br>
+      FIFO (p): geçici bir depolama cihazı (sıra).</br>
+      Soket (ler): soket dosyaları </br>
+
+- ls -F komutu
+
+ls -F komutu bir dosyanın türünün ne olduğunu gösterir ve dosyanın adının sonuna özel bir karakter yazdırılır.</br>
+
+(boş): Normal dosya</br>
+*: Yürütülebilir program veya komut dosyası</br>
+/: Dizin </br>
+@ : Sembolik bağlantı </br>
+| : FIFO (named pipe)
+=: Soket </br>
+
+-ls -i komutu
+
+ls -i komutu her dosya için i-node numarasını yazdırır.
+
+### I-nodes
+
