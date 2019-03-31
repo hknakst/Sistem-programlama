@@ -326,6 +326,7 @@ Dosyalara veya dizinlere erişime izin vermek veya vermemek için kullanılan iz
 chmod komutu dosya sahibini(owner) değiştirmede kullanılır.Genellikle sadece root bu komutu kullanabilir.Yukarıda görüldüğü gibi chmod komutu iki farklı şekilde kullanılır; </br>
 Daha çok kullanılan sayılar kullanılarak verilen izinlerdir sayılar belirli bir düzene göre verilebilir;
 - r=4	w=2	x=1
+
 chmod 200 a.txt 	yazarsak a dosyasında kullanıcıya sadece yazma hakkı verilir, grup ve diğer(herkese) herhangi bir yetki verilmez.</br>
 chmod 635 a.txt		yazarsak kullanıcıya okuma ve yazma, gruplara yazma ve calıstırma, herkese okuma ve calıstırma izni vermiş oluruz.</br>
 ikinci kullanım şeklinde grup için g,kullanıcı için u, digerleri icin o harfleri kullanılır.</br>
@@ -338,3 +339,55 @@ chgrp asd a.txt		yazarak a.txt dosyasının grubunu değiştirerek asd grubuna a
 -chown komutu 
 
 chown hkn a.txt		yazarak a.txt dosyasını başka bir kullanıcıdan alıp hkn kullanıcısına verebiliriz.
+
+
+### Dosyanın içeriğine bakmak
+
+- cat komutu
+
+cat komutunu dosyaların içeriğine bakmak veya içeriğini değiştirmek için kullanılır. </br>
+cat textfile1 textfile2 şeklinde kullanırsak önce textfile1'in içeriği hemen ardından textfile2'nin içeriğini terminalde görebiliriz.Eğer dosyanın içeriğini değiştirmek istersek cat >> textfile1 yazarak terminalde textfile1'in içine gidilir ve dosyaya yazma yapılabilir cıkmak için ctrl+c kullanılır,ama burada dikkat edilmesi gereken şey dosyanın üzerine yazma yapılır yani önceki içerik kaybolur.
+
+- more komutu
+
+Uzun bir dosyayı açmak istediğiniz zaman bütün yazılar birden önünüze açılır ve öününzde son satırların olduğu kısımları görürsünüz. Bu gibi durumlarda "more" kullanarak önce ekrana sığabilecek kadar veriyi ekrana yazdırıp daha sonra ENTER ile birer birer satır atlatma yapabilirsiniz.
+
+Herhangi bir satır numarasından itibaren veri çekme işlemi; </br>
+more +satir_numarası  dosya_adi  şeklinde olmaktadır.
+
+Belirli bir kelime ile başlayan satırı içeren kısımdan itibaren veri çekme işlemi; </br>
+more  +/"kelime"   dosya_adi şeklinde olmaktadır. 
+
+
+- less komutu 
+
+"less" komutu verileri geriye doğru ilerleterek işleme alır. Öyle ki, bir dosyayı açmaya çalıştığı zaman dosyanın tamamını açıp sonra işlemlere geçmez, herhangi bir text editör programı(mesela vi) dosyayı açaçağı zaman dosyanın hepsini yükledikten sonra açma işlemi yapar, fakat "less" komutu bunun aksine dosyayı tamamiyle ele almaz sadece istenilen, belirtilen kısımlarını işleme alır. Bu yüzden "less" diğer kelime işlemcilerden daha hızlıdır. Performans açısından daha iyidir. Kullanımı "Vi" programına benzemektedir. "more" ile kıyaslandığında "less" daha iyidir.
+
+Komutların kullanımı, "less dosya_adi" şeklinde dosya açıladıktan sonra da herhangi bir komut harfine tıklayarak kullanabilirsiniz. Mesela dosya açıldıktan sonra "q" harfine basarsanız çıkış yapar, "-N" ile satırları numaraları ile gösterir, "& /aranan_kelime" ile aradığınız kelimeleri satırları ile beraber bulur gösterir, "G" ile sayfa sonuna gider, "g" ile sayfa başına gider, "53g" ile 53. satıra gider vb. </br>
+"less" ile dosyalar üzerinde herhangi bir düzenleme yapamazsınız. "v" tuşuna basarsanız varsayılan olarak ayarlı olan text editör programınız ile dosya, düzenlenmek üzere açılacaktır.
+
+### Unix komutlarında yardım almak
+
+- man <command_name> komutu
+
+Bu komut ile herhangi bir komut hakkında detaylı bir dökümana erişebiliyoruz. Komutun tüm belgelerini gösterir.
+
+- apropos <keyword> komutu
+ 
+ Belirtilen anahtar kelimeyle birlikte komutların tümünü açıklamalarında gösterir. apropos yerine  man -k  'da kullanılabilir.
+ 
+ - type <string>
+ 
+ komutun sistem yolunu verir.
+ 
+ ### Diğer dosya sistemleri 
+ 
+SunOS'ta 3 farklı dosya sistemi vardır
+
+- Disk tabanlı
+- Dağıtılmış
+- Sözde(pseudo)
+
+Disk tabanlı dosya sistemleri sabit diskler, CDROM'lar, disketler içerir. </br>
+Dağıtılmış dosya sistemleri ağ kaynaklarını yönetir. </br>
+Sözde dosya sistemleri bellek tabanlıdır ve disk alanı kullanmaz </br>
