@@ -225,3 +225,116 @@ ls -i komutu her dosya için i-node numarasını yazdırır.
 
 ### I-nodes
 
+Dosya sistemindeki her nesne için yönetim bilgisidir.
+İnode'lar diskte bulunur ve isimleri yoktur. Bunun yerine, inode dizisindeki pozisyonlarını belirten endekslere (sayılara) sahiptirler. </br>
+Her inode genellikle şunları içerir:
+
+- Varsa, öğenin içeriğinin diskteki konumu
+- Öğenin türü (örneğin, dosya, dizin, sembolik bağlantı)
+- Varsa, öğenin bayt cinsinden boyutu
+- Dosyanın inode'unun en son değiştirildiği saat (ctime)
+- Dosyanın içeriğinin en son değiştirildiği saat (saat)
+- Dosyanın en son erişildiği zaman (atime), okuma, yürütme vb.
+- Referans sayısı: Dosyanın sahip olduğu adların sayısı
+- Dosyanın sahibi (bir UID)
+- Dosyanın grubu (bir GID)
+- Dosyanın mod bitleri (ayrıca dosya izinleri veya izin bitleri olarak da bilinir)
+
+(inode yapısı cizilebilir)
+
+### Dosya işlemleri 
+
+- touch <file> komutu
+ 
+ touch komutu ile dosya oluşturulur veya oluşturulmuş dosyanın son değiştirilme tarihi değiştirilir. </br>
+ 
+ - mv <file1> <file2>
+ 
+ mv komutunu bu şekilde kullanırsak file1 dosyasının adını file2 olarak değiştirmiş oluruz yani dosyaları yeniden adlandırmada kullanılabilir. </br>
+ 
+ - mv <file1> <dir> 
+ 
+ mv komutunun ikinci parametresine dizin verirsek , birinci parametredeki dosyayı bu dizine taşır. </br>
+ 
+ - mv <file1> <dir/file2>
+ 
+ mv komutunu bu şekilde de kullanabilir. Bu şekilde kullanıldığı zaman dizine dosyayı taşır aynı zaman dosyanın adını file2 olarak değiştirir. </br> 
+ 
+ 
+ - cp <file> [<file2>|<dir>|<dir/file2>] komutu
+ 
+ cp komutu dosya kopyalama işlemlerinde kullanılır kopyalanır ad değiştirilir veya ikisini birden yapar. cp a deneme/b komutunu verirsek a dosyasını deneme dizininde b dosyası olusturarak bunu içine kopyalar. </br>
+ 
+- rm [-i] <files(s)>
+
+dosya veya dosya listesini siler. link varsa oda eksilir ,dizin ile bağlantısı kopar dizinde o dosyanın yerine null atanır.Dosya silme işlemlerinde çoğu zaman parametre vermeye gerek kalmaz rm dosya_adı yazılarak dosya silinebilir.
+
+### Dizin oluşturma ve silme
+
+- mkdir <directory_name> komutu
+
+Geçerli dizinin altında yeni bir dizin oluşturur.
+
+- rmdir <directory_name> komutu
+
+sadece boş dizini silebilir.
+
+- rm -r <directory_name> komutu
+
+Dizini ve alt dizinler de dahil olmak üzere içeriğinin tümünü yinelemeli olarak kaldırır. r parametresi recursive anlamına gelmektedir silerken altdan yukarıya doğru siler.
+
+### Links(bağlantılar) oluşturma
+
+- ln –s <existing_file> <link_name> komutu
+
+sembolik bir bağ (-s) oluşturur. </br>
+link_name, başka bir dizinde veya başka bir fiziksel makinede bulunabilecek varolan dosyanın bir göstergesidir. </br>
+hard link(sert bir bağlantı) oluşturmaktan kaçınılmalıdır,aynı cihazın aynı fiziksel bölümünde olmalıdır; link_name, mevcut dosya için başka bir addır. </br>
+
+(foto)
+
+ln -s fileA fileB  yazarsak, oluşmamış fileB dosyasına sembolik link oluşturuluyor ve fileA'yı işaret ediyor.Oluşturulan bu fileB'ye farklı bir inode atanıyor fakat yapı gereği fileA'ı işaret ediyor.Eğer fileA'da içerik değişirse fileB'de de bu değişiklik görülür. fileB yani sembolik link olam dosyaya birşey yazılırsa fileA'da da içerik değişir çünkü fileB, fileA'nın bölgesini işaret ediyor. </br>
+
+ln fileC fileD  yazarsak, fileD yapı gereği fileC'yi işaret etmek yerine direk fileC'dir yani inode'ları aynıdır bu hard link'tir. fileC'nin link sayısı bir artar bu hard link'lerde böyledir sembolik link'lerde bu artma yoktur.</br>
+
+
+
+### Dosya sahipliği
+
+Her dosyanın tek bir sahibi var. </br>
+chown komutu sahibini değiştirmek için kullanılabilir; genellikle sadece root bu komutu kullanabilir. </br>
+Her dosya aynı zamanda tek bir gruba aittir. </br>
+Gruplar herkesten farklı izinlere sahip olabilir. </br>
+
+### Dosya izinleri
+
+Dosyalara veya dizinlere erişime izin vermek veya vermemek için kullanılan izinler aşağıdaki gibidir; </br>
+Üç tür izin vardır :</br>
+- Oku (r)
+- Yaz (w)
+- Yürüt (x) (örneğin dosyalarda arama yapmak)
+
+İzinler üç düzeyde verilebilir:</br>
+- Kullanıcı (u)
+- Grup (g)
+- Diğer (o)
+
+- chmod <mode> <file(s)>  komutu 
+ 
+ (foto)
+
+chmod komutu dosya sahibini(owner) değiştirmede kullanılır.Genellikle sadece root bu komutu kullanabilir.Yukarıda görüldüğü gibi chmod komutu iki farklı şekilde kullanılır; </br>
+Daha çok kullanılan sayılar kullanılarak verilen izinlerdir sayılar belirli bir düzene göre verilebilir;
+- r=4	w=2	x=1
+chmod 200 a.txt 	yazarsak a dosyasında kullanıcıya sadece yazma hakkı verilir, grup ve diğer(herkese) herhangi bir yetki verilmez.</br>
+chmod 635 a.txt		yazarsak kullanıcıya okuma ve yazma, gruplara yazma ve calıstırma, herkese okuma ve calıstırma izni vermiş oluruz.</br>
+ikinci kullanım şeklinde grup için g,kullanıcı için u, digerleri icin o harfleri kullanılır.</br>
+chmod g-r a.txt 	yazarsak gruplardan okuma yetkisini alır veya benzer şekilde g+rw yazarsak gruplara okuma yazma yetkisi veririz.</br>
+
+- chgrp komutu
+
+chgrp asd a.txt		yazarak a.txt dosyasının grubunu değiştirerek asd grubuna alabiliriz.
+
+-chown komutu 
+
+chown hkn a.txt		yazarak a.txt dosyasını başka bir kullanıcıdan alıp hkn kullanıcısına verebiliriz.
