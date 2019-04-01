@@ -366,6 +366,33 @@ more  +/"kelime"   dosya_adi şeklinde olmaktadır.
 Komutların kullanımı, "less dosya_adi" şeklinde dosya açıladıktan sonra da herhangi bir komut harfine tıklayarak kullanabilirsiniz. Mesela dosya açıldıktan sonra "q" harfine basarsanız çıkış yapar, "-N" ile satırları numaraları ile gösterir, "& /aranan_kelime" ile aradığınız kelimeleri satırları ile beraber bulur gösterir, "G" ile sayfa sonuna gider, "g" ile sayfa başına gider, "53g" ile 53. satıra gider vb. </br>
 "less" ile dosyalar üzerinde herhangi bir düzenleme yapamazsınız. "v" tuşuna basarsanız varsayılan olarak ayarlı olan text editör programınız ile dosya, düzenlenmek üzere açılacaktır.
 
+
+### Wildcards(joker karakterler)(Globbing)
+
+Linux işletim sistemi, yazdığınız komutları daha kısa ve işlevsel hale getiren joker karakterleri(wildcards) desteklemektedir. Wildcard' lar, size, nispeten daha kompleks işlemler yaparken, kolaylık sağlar. Örnek olarak bir dizin altında bulunan .cfg uzantılı dosyaları başka bir dizine kopyalamak istediğimizi düşünelim. Bunun için normal şartlar altında, ya bir görsel arayüz programı kullanarak, ya da tüm dosyaları tek tek kopyala komutu kullanarak, kaynak dosyaları başka bir dizine yerleştirebiliriz. Ancak wildcards' lar sayesinde aşağıdaki gibi, çok daha kısa bir söz dizimi ile bu işlemi kolaylıkla gerçekleştirebiliriz.</br>
+
+cp ~/workspace/*.cfg ~/workspace2
+
+-  *Bütün karakterler, çoğul seçim
+- ?	 Herhangi bir karakter, tekil seçim
+- [karakterler]	 Karakter kümesi, veya operatörü ile çalışır.
+- [!karakterler]	 Karakter kümesi haricinde demektir.
+- [[:sınıf:]]	 Belirtilen bir karakter sınıfına ait olan eşleşme. Karakter sınıfları bir sonraki tabloda anlatılmaktadır.
+
+örnekler; </br>
+
+*.cfg -> Sonu .cfg ile biten dosyalar
+
+A*.cfg -> A ile başlayan Sonu .cfg ile biten dosyalar
+
+???.txt-> 3 harfli olup sonu .txt ile biten dosyalar
+
+[abc]* veya [a-c]-> a, b ya da c ile başlayan dosyalar,[a-c] demek a'dan c'ye kadar olan harfleri temsil etmekdir veya [a-cn-z] ifadesi ile a'dan c'ye ve n'den z'ye kadar olan karakterleri temsil ederiz.
+
+Version.[:digit:] [:digit:] -> Version.rakam rakam formatındaki dosyalar
+
+*[[:upper:]] -> Sonu buyuk harfli biten dosyalar
+
 ### Unix komutlarında yardım almak
 
 - man <command_name> komutu
@@ -391,3 +418,78 @@ SunOS'ta 3 farklı dosya sistemi vardır
 Disk tabanlı dosya sistemleri sabit diskler, CDROM'lar, disketler içerir. </br>
 Dağıtılmış dosya sistemleri ağ kaynaklarını yönetir. </br>
 Sözde dosya sistemleri bellek tabanlıdır ve disk alanı kullanmaz </br>
+
+
+
+## Bölüm-3 Text Editing
+
+Şimdiye kadar dosya sistemindeki dosyaları değiştirdik (cp, mv, rm, ln) ve içeriğini (cat, daha az) görüntüledik. </br>
+Dosyaların içeriğini nasıl düzenlersiniz?
+Unix editörleri düz ASCII metin dosyalarıyla çalışır: vi, emacs, pico.
+
+### Neden vi?
+Kullanılabilirlik
+- Herhangi bir Unix / Linux sisteminde çalışabilir.
+
+Komutlar anahtarlardır.
+
+- Uzaktan oturum açma yoluyla erişilebilir (ör. Ssh).
+- Fare kullanımını önler.
+
+Basit ve güçlü bir metin editörü.
+
+viden baska emacs,pico gibi editörlerde vardır
+vi uzakdan erişim ile teriminale bağlanabilir.
+
+- vi yazarak editörü açabiliriz
+- :help yazarak vi editörü hakkında detaylı bir bilgiye ulaşabiliriz
+- :q! ile çıkabiliriz
+- vi deneme.txt  diyerek bir deneme dosyasını editörde açabiliriz. </br>
+
+iki modu vardır.
+- 1. command modu: komutlar icra edilir. ilk açıldığında bu moddadır
+- 2. insert modu: dosya iceriği düzenlemesi yapılır. esc'ye basınca komut moduna geceriz.
+
+üç komut modu var biri normal, ikincisi :'dan sonraki komutu, üçüncüsü i modu yani yazma modu
+- escape tuşu ile geri gelebiliriz
+
+insert modunda(i'e basınca) backspace ile silebiliriz ama insert modunun dışında x ile veya shift-x ilede silebiliriz.
+shift+c alt satırla üst satırı birleştirir
+
+### cursor hareketi:
+yön tuşları veya h sol j asağı k yukarı l ise sağ yönde hareket etmemizi sağlar</br>
+4j yazınca 4 satır aşağıya gider</br>
+CTRL-F sonraki sayfa</br>
+u (undo) yazarsak son değişikliği iptal eder </br>
+:7 yazarsak direk 7.satıra gider </br>
+x  cursorun üzerinde olduğu karekteri siler.(imlecin üzerindeki karekteri)</br>
+dd , D  yazarsak cursorun üzerinde olduğu satırı siler</br>
+cc ,C 	cursor üzerinde oldugu kelimeyi değiştirir</br>
+rx	karakteri x ile yer değiştirir </br>
+yy	bir satırın kopyasını alır </br>
+p	yapıstırır </br> 
+j	üzerinde bulundugu satır ve alt satırı birleştirir. </br>
+/bil yazarsak ilk bil yazan yeri bulur //bil ikinci bil yazan yeri bulur </br>
+?bil yazarsak bu sefer yukarıya doğru arar </br>
+
+### file operation:
+wq	 write quit (kaydeder ve çıkar) </br>
+w	 sadece write </br>
+w  filename 	dosyaya yaz </br> 
+q!	 değişiklik olsa bile değiştirmeden çıkabilirz </br>
+e filename	 editöre dosyayı yükle </br>
+r filename 	cursor'ın oldugu satırdan itibaren dosyanın oldugu satıra ekle </br>
+en son :W yazarsak dosyayı yazar :w! yazarsak üzerine yazar </br>
+:wq yazıp yazıp cık denebilir eğer dosyada değişiklik yapıp kaydetmeden cıkmak istiyorsak :q! yazmalıyız :q ile cıkamayız </br>
+daha fazla detay için :help dışında http://www.belgeler.org/lis/archive-tlkg-lis-7.2.html kullanılabilir. </br>
+
+### arama:
+/kelime	 ileri doğru ara </br>
+?kelime  geri doğru ara</br>
+n  son aranan tekrar</br>
+N  son aranan tersi yönde tekrar</br>
+
+
+
+## Bölüm-4 Shell operatörleri
+
