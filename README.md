@@ -58,7 +58,7 @@ Dosyanın hangi shell ile koşacağını belirtmek için;
 
 /bin/bash: Burada belirtilmesi gereken diğer bir konu da sisteminizde hangi bash yazılımını kullandığınızdır. which bash komutunun sonucu size mutlak adresi söyleyecektir. #! ifadesinden sonra herhangi bir bash adresi yazmasanız da Script çalışabilir. Fakat sizin yazdığınız Script başka bir sistemde çalıştırılmak istendiğinde hata verme ihtimali vardır. Bu sebeple bash adresini yazmayı alışkanlık haline getirmek daha sağlıklı olacaktır.
 
-- # ifadesiyle başlayan satırlar yorum satırlarıdır. 
+- #ifadesiyle başlayan satırlar yorum satırlarıdır. 
 
 Bu satırları Bash yorum olarak farz edecek ve işleme almayacaktır. Dosyanın sahibi, oluşturulma tarihi ve oluşturulma maksadı vb. bilgilere burada yer verebilirsiniz.(not: bash=>komut dili yorumlayıcısı)
 
@@ -493,3 +493,212 @@ N  son aranan tersi yönde tekrar</br>
 
 ## Bölüm-4 Shell operatörleri
 
+### Üç standart dosya
+
+- stdin , standart giriş
+
+giriş karakter akışı, varsayılan giriş klavye'dir.
+
+- stdout , standart çıkış
+
+çıkış karakter akışı, varsayılan çıkış terminaldir.
+
+- stderr , standart hata(error)
+
+hata mesajlarını alır, varsayılan olarak terminal ayarlıdır.
+
+### stdout yönlendirme
+
+stdout'u terminale yönlendirmek yerine bir programı bir dosyaya yazmasını söyleyebilirsiniz. </br>
+>filename : stdout'u bir dosyaya yönlendirir.Eğer dosya yoksa dosyayı oluşturur.Eğer dosya varsa dosyayı sıfırlar.</br>
+>>filename : varolan bir dosyaya stdout ekler. örneğin; </br>
+man ls > ls_help.txt (man ls komutunun cıktısını terminale yazdırmak yerine belirlenen dosyaya yazar)</br>
+echo $PWD > current_directory </br>
+cat file1 >> file2 (file1 dosyasını file2ye yazar ama file2deki mevcut bilgiyi korur üstüne yazmaz dosyanın devamına yazar.)
+
+### stdin yönlendirme
+
+stdin'in terminalden okumak yerine bir dosyadan okumasını söyleyebiliriz. </br>
+<filename : stdin'i mevcut bir dosyaya yönlendirir.
+<<kelime  : takip eden satırlandarn sadece kelime'yi içeren satırada kadar, stdin'i yönlendirir. örneğin; </br>
+mail user@domain.com < message.txt </br>
+at 3am < cmds or at 0945 < cmds </br>
+sort < friends > sorted_friends </br>
+cat << end (end kelimesi girilip stdin okuyana kadar yönlendirme yapılır, end kelimesi girildiği an yönlendirme biter ve yazılanları ekrana basar)</br>
+
+### Standart dosya tanımlayıcıları
+
+Bir dosya bir tanımlayıcı ile ilişkilendirilebilir. </br>
+Kabuk(shell), sırasıyla her bir komut için üç standart dosyayı üç standart dosya tanımlayıcısı ile ilişkilendirir.</br>
+- 0 : standard input (STDIN)
+- 1 : standard output (STDOUT)
+- 2 : standard error (STDERR)
+
+Standart tanımlayıcılar, kullanıcının terminali ile ilişkilendirilir, ancak başka dosyalara da yönlendirilebilirler.
+
+### Dosya tanımlayıcı oluşturma
+
+Yazmak üzere bir dosyayı açmak için bunlardan birini kullanın. </br>
+exec n> filename (dosyayı yazma işlemi için açıyoruz , yazma işlemi kullanıldığında n dosya tanımlayıcıyı oluşturuyor. </br>
+exec n>> filename (sonundan itibaren yazmak üzere n oluşturuluyor)</br>
+n bir tamsayıdır ve dosya adı, yazmak için açılan dosyanın adıdır. </br>
+İlk form, eğer böyle bir dosya varsa, belirtilen dosyanın üzerine yazar. </br>
+İkinci form belirtilen dosya adına eklenir. </br>
+Bir dosyayı okumak üzere açmak için </br>
+exec n<filename (okuma işlemi için açılıyor, okumak için n'nin file nesnesi oluşturuluyor)</br>
+Hem okuma hem de yazma için bir dosyayı açmak için </br>
+exec n<> filename (n adında dosya tanımlayıcısı oluşturuluru)</br>
+
+### Dosya Tanımlayıcıları ile Yönlendirme
+
+Standart çıktıyı, dosya tanıtıcısı n ile ilişkilendirilmiş dosyaya yönlendirmek için,</br>
+komut>& n (n bağlı olduğu dosyaya yazıyor, terminalde yazılacak veri n'nin bağlı olduğu dosyaya yazılır) </br>
+Standart girişi, dosya tanımlayıcısı n ile ilişkilendirilmiş dosyadan yönlendirmek için,</br>
+komut<&n (komut bilmez veriyi nereden aldığını) </br>
+exec n> & -: çıktı dosyası tanımlayıcısı n kapalı.
+    exec 1>&- , exec>&-: standart çıkış kapalı.
+exec n <& -: giriş dosyası tanımlayıcısı n kapalı.
+    exec 0<&- , exec<&-: standart giriş kapalı.
+    
+    
+Bir dosyaya yazma; </br>
+exec 4> dosya  ("dosya" yı açın, fd 4 atayın.) </br>
+ls> & 4   (ls çıktısını "dosya" ya yaz)</br>
+
+Bir dosyadan okuma  </br>
+exec 5 <dosya  ("dosya" yı açın, fd 4 atayın.)  </br>
+wc <& 5   ("dosya" dan giriş oku)  </br>
+
+Bir dosyada belirtilen bir yere yazma  </br>
+echo 1234567890 > dosya  ("dosya" ya dize yaz.) </br> 
+exec 3<> dosya  ("dosya" yı açın, ona fd 3'ü atayın.)</br>
+read -n 4 <&3  ( Sadece 4 karakter oku.) </br>
+echo -n . >&3   (Oraya bir ondalık işareti yazın.) </br>
+exec 3>&-  (fd 3'ü kapatın.) </br>
+cat dosya    ( ==> 1234.67890) </br>
+
+### Genel Giriş / Çıkış Yönlendirme
+Standart çıkış veya giriş yönlendirmesi açıkça aşağıdaki genel şekilde belirtilir. </br> 
+- komut 1>dosya 
+- komut 1>>dosya 
+- komut 0<dosya 
+
+STDOUT ve STDERR dosyalarını ayrı ayrı dosyalara  yönlendirmek için kullanılan temel sözdizimi; </br>
+- komut 1>dosyaA 2>dosyaB </br>
+Belirtilen komutun STDOUT dosyası A dosyasına yönlendirilir ve STDERR (hata mesajları) fileB dosyasına yönlendirilir.
+
+### Ayrı Dosyaları Yeniden Yönlendirme
+
+- komut >> dosyaA 2> dosyaB
+- komut > fileA 2 >> fileB
+- komut  >> dosyaA 2 >> dosyaB
+
+İlk form STDOUT dosyasını fileA'ya ekler ve STDERR'yi fileB'ye yönlendirir. </br>
+İkinci form STDOUT'u fileA'ya yönlendirir ve STDERR'yi fileB'ye ekler. </br>
+Üçüncü form STDOUT dosyasını fileA'ya ekler ve STDERR'yi fileB'ye ekler. </br>
+
+### Tek Bir Dosyaya Yönlendirme.
+
+Aynı dosyaya STDOUT ve STDERR yönlendirmek veya eklemek için temel sözdizimi; </br>
+komut >file2>&1 veya command &> file </br>
+komut >>file2>&1 </br>
+STDOUT (dosya tanımlayıcısı 1) ve STDERR (dosya tanımlayıcısı 2) belirtilen dosyaya yönlendirilir veya eklenir. </br>
+komut 2>&1>>file (bunu yukarıdakiyle karşılaştır). </br>
+
+m> & n: dosya tanımlayıcıları m, n'ye yönlendirilir. </br>
+  >&n: standart çıkışı n dosya tanımlayıcısına yönlendirilir
+Örnek; </br>
+rm -rf /tmp/my_tmp_dir > /dev/null 2>&1
+rdate ntp.nasa.gov >> /var/log/rdate.log 2>&1
+if [ ! -f $FILE ]; then echo "$FILE is not a file" >&2; fi
+
+### Pipes ( veri yolu)
+
+Pipe (|): Bir komutun stdout'unu diğerinin stdinine bağlar. </br>
+Örnekler; </br>
+
+ls –la | less </br>
+ls –al | wc </br>
+ls-al | sort +4r </br>
+cat file | wc </br>
+man bash | grep "history" </br>
+ps aux | grep user1 | wc –l </br>
+
+
+### Süreçler(Processes)
+
+Bir seferde birden fazla program çalıştırmak için;. </br>
+Noktalı virgülle (;) ayrı komutlar yazılabilir  </br>
+- date; who  (sıralı bir şekilde koşar)
+
+Aynı anda birden fazla program çalıştırmak için; </br>
+Komutun sonunda ve işaretini (&) kullanın. </br>
+ls -al & wc *  (paralel bir şekilde koşar hangisinin nezaman biteceği kesin değildir.) </br>
+
+### Filtreler ( Filters)
+
+Filtre,girişi alan ve bir şekilde dönüştüren bir programdır.
+
+- wc komutu </br>
+wc , satır / sözcük / karakter sayısı verir </br>
+
+- grep komutu </br>
+grep , belirli bir örneğe sahip hatları arar </br>
+grep <pattern> <filename> (örnek RE olabilir) </br>
+ 
+- sort komutu </br>
+sort , satırları alfabetik veya sayısal olarak sıralar </br> 
+sort -r: normal sıralama düzenini tersine çevirir </br> 
+sort -n: sayısal sırada sıralar </br> 
+sort + 2n: ikinci sütundaki öğeleri sıralar</br>
+
+-cut komutu </br>
+cut - stdout'a gönderilecek her satırın parçalarını seçer. </br>
+cut -c1-5: her satırın ilk 5 karakterini seç </br> 
+cut -c1,5: her satırın ilk ve beşinci karakterlerini seç </br> 
+cut -d: -f1,3 /etc/passwd: kullanıcı adlarını ID'leriyle eşleştir </br>
+
+- head komutu </br>
+head , dosyaların ilk birkaç satırını gösterir. </br>
+head -n <dosyaadı>    , n: bir tam sayı </br>
+
+- tail komutu </br>
+tail , dosyanın son bölümünü görüntüler </br>
+tail -n <dosyaadı> : son n satırı . </br>
+tail + n <dosyaadı>: n. satırdan sonraki satırlar </br>
+
+- diff komutu </br>
+diff ,farklı olan tüm satırları gösterir. </br>
+
+- cmp komutu </br>
+cmp , iki dosyanın farklı olduğu ilk yeri bul </br>
+<diff / cmp> <dosya1> <dosya2>   </br>
+
+od - Bir dosyanın içeriğini sekizlik(oktal) gösterimini gösterir. </br>
+Örneğin. od –c: tüm baytların görsel gösterimi </br>
+
+- ls -lt komutu </br>
+ls –lt , zaman sırasına göre dosya listesi </br>
+
+- crypt komutu </br>
+crypt , bir dosyayı kodlama veya kod çözme </br>
+Örneğin. şifreli anahtar <clear.file> encrypted.file </br>
+
+- tr komutu </br>
+tr , girişindeki karakterleri çevirir. </br>
+tr "[: lower:]" "[: upper:]" < <dosya>    (dosyadaki küçük harfleri büyük harflere çevirir.)</br>
+ 
+- uniq komutu </br>
+uniq , bir dosyadaki tekrarlanan satırları rapor eder veya filtreler. </br>
+uniq –d <dosya>    , <dosya> 'da tekrarlanan satırları görüntüleme </br>
+uniq –u <dosya>    , <dosya> da tekrarlanmayan ekran satırları görüntüleme  </br> 
+uniq –c <dosya>    , <dosya> 'daki tekrarlanan satırları tekrar sayılarıyla birlikte görüntüleme </br>
+
+
+- pr komutu </br>
+pr , dosyaları çeşitli şekillerde yazdırır.
+ls -a | pr -n -h $ (pwd) , geçerli dizindeki tüm dosyaların numaralandırılmış bir listesini yazdırır.
+
+
+Aşağıdaki komut ne yapar?
+cat * | tr -sc A-Za-z '\012' | sort | uniq –c | sort –n | tail | pr -5 –t
