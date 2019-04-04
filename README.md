@@ -510,8 +510,8 @@ hata mesajlarını alır, varsayılan olarak terminal ayarlıdır.
 ### stdout yönlendirme
 
 stdout'u terminale yönlendirmek yerine bir programı bir dosyaya yazmasını söyleyebilirsiniz. </br>
->filename : stdout'u bir dosyaya yönlendirir.Eğer dosya yoksa dosyayı oluşturur.Eğer dosya varsa dosyayı sıfırlar.</br>
->>filename : varolan bir dosyaya stdout ekler. örneğin; </br>
+\>filename : stdout'u bir dosyaya yönlendirir.Eğer dosya yoksa dosyayı oluşturur.Eğer dosya varsa dosyayı sıfırlar.</br>
+\>>filename : varolan bir dosyaya stdout ekler. örneğin; </br>
 man ls > ls_help.txt (man ls komutunun cıktısını terminale yazdırmak yerine belirlenen dosyaya yazar)</br>
 echo $PWD > current_directory </br>
 cat file1 >> file2 (file1 dosyasını file2ye yazar ama file2deki mevcut bilgiyi korur üstüne yazmaz dosyanın devamına yazar.)
