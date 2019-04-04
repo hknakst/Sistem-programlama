@@ -853,3 +853,44 @@ kümedeki herhangi bir karakter eşleşecek </br>
 
 “[a-z]{3}” üç küçük harfle eşleşiyor.Yani en az üç küçük harf barındırıyorsa </br>
 “m.{2,4}” dizeleri m ve ardından 2 ile 4 karakter arasında eşleştirir. </br>
+
+
+### Bunlar ne anlama geliyor?
+
+Örnekler </br> 
+egrep ”^B.*s$” dosya </br>
+egrep ”[0-9]{3}” dosya </br>
+egrep ”num(ber)? [0-9]+” dosya </br>
+egrep ”word” dosya | wc -l </br>
+egrep ”[A-Z].*\?” dosya </br>
+ls -l | egrep "^....r.-r.-" </br>
+
+Ya grep kullanılırsa?
+En az iki 0 içeren kullanıcı kimliğine sahip kullanıcıları arayın </br>
+  grep "^[^:]*:[^:]*:[^:]*0[^:]*0[^:]*:.*" /etc/passwd </br>
+
+/etc/passwd dosya formatı; </br>
+\<username>:\x:\<userid>:\<groupid>:\<useridinfo>:\<homedir>:\<loginshell> </br>
+x karakteri, şifreli parolanın /etc/shadow dosyasında saklandığını gösterir. </br>
+
+
+### Egrep ile kelime arama 
+
+Sistem yazım denetimi için küçük bir sözlüğe sahip olabilir:/usr/dict/words  </br>
+Beş sesli harfin tümünü içeren kelimeleri alfabetik sırayla bulun. </br>
+
+cat alphvowels.</br>
+^[^aeiou]*a[^aeiou]*e[^aeiou]*i[^aeiou]*o[^aeiou]*u[^aeiou]*$ </br>
+egrep -f alphvowels /usr/dict/words </br>
+
+Harfleri alfabetik sırada olan altı veya daha fazla harften oluşan tüm kelimeleri bulun. </br>
+cat > monotonic </br>
+^a?b?c?d?e?f?g?h?i?j?k?l?m?n?o?p?q?r?s?t?u?v?w?x?y?x?$ </br>
+egrep -f monotonic /usr/dict/words | grep "......" </br>
+
+pratik:  </br>
+En az 10 karakterden oluşan bir sözcükle başlayan satırlar. </br>
+Standart 3 bölümlü formda öğrenci kimliği içeren satırlar. </br>
+Ardışık 2 büyük harfli sözcük içeren satır sayısı. </br>
+Alfabetik karakterle bitmeyen satır sayısı. </br>
+Bir cümlenin sonunda sesli harfle başlayan bir kelimeyi içeren satırlar. </br>
