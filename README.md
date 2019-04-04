@@ -652,7 +652,7 @@ sort -r: normal sıralama düzenini tersine çevirir </br>
 sort -n: sayısal sırada sıralar </br> 
 sort + 2n: ikinci sütundaki öğeleri sıralar</br>
 
--cut komutu </br>
+- cut komutu </br>
 cut - stdout'a gönderilecek her satırın parçalarını seçer. </br>
 cut -c1-5: her satırın ilk 5 karakterini seç </br> 
 cut -c1,5: her satırın ilk ve beşinci karakterlerini seç </br> 
@@ -674,7 +674,8 @@ diff ,farklı olan tüm satırları gösterir. </br>
 cmp , iki dosyanın farklı olduğu ilk yeri bul </br>
 <diff / cmp> <dosya1> <dosya2>   </br>
 
-od - Bir dosyanın içeriğini sekizlik(oktal) gösterimini gösterir. </br>
+- od komutu </br>
+od , Bir dosyanın içeriğini sekizlik(oktal) gösterimini gösterir. </br>
 Örneğin. od –c: tüm baytların görsel gösterimi </br>
 
 - ls -lt komutu </br>
@@ -702,3 +703,62 @@ ls -a | pr -n -h $ (pwd) , geçerli dizindeki tüm dosyaların numaralandırılm
 
 Aşağıdaki komut ne yapar?
 cat * | tr -sc A-Za-z '\012' | sort | uniq –c | sort –n | tail | pr -5 –t
+
+### Communication(iletişim) komutları
+
+- talk komutu</br>
+talk ,sisteme kayitli olan baska bir kullanici ile etkileşimli sohbet</br>
+Örneğin. talk hakan pts/2 </br>
+- write komutu  </br> 
+write, başka bir kullanıcıya mesaj gönderme</br> 
+Örneğin. write hakan pts/2  </br> 
+mesg [n | y] :  mesajlara izin ver / reddet</br> 
+
+- mail, pine : text tabanlı e-posta programı </br>
+- ftp, sftp : metin tabanlı FTP programı </br>
+- telnet, ssh : doğrudan diğer makinelere bağlanmak için kullanılır </br>
+- lynx : metin tabanlı web tarayıcısı </br>
+
+### Processes(süreçler) komutları
+- ps komutu </br>
+ps , mevcut süreçleri listeler </br>
+
+- top komutu </br>
+top , sistemin süreçler tarafından kullanımının dinamik gösterimini yapar
+
+- kill komutu </br>
+kill , belirlenen bir süreci sonlandır (varsayılan: SIGTERM) </br>
+kill –9 <pid> (SIGKILL sinyali gönderiliyor)</br>
+
+- time komutu </br>
+time,  bir süreç için zamanlama bilgisini tutar ve gösterir. </br>
+time ls (real / user / sys zamanı gösteriliyor).</br>
+
+- wait komutu </br>
+wait , & ile başlayan tüm işlemleri bekliyor.(belli bir işlemi bekleme) </br>
+
+- nohup komutu </br>
+nohup , oturumu kapattıktan sonra komutu çalıştırmaya devam ettirir.
+
+- nice komutu </br>
+nice , komutu düşük öncelikle çalıştırmaya devam et. </br>
+nohup / nice <komut> &
+
+### Daha fazla dosya sistemi komutları
+
+- file komutu  </br>
+file , dosya türünü belirler(gösterir)  </br>
+file /bin/ed  </br>
+/bin/ed: saf çalıştırılabilir  </br>
+
+Çalıştırılabilir binary bir program, başında "sihirli sayı" ile işaretlenmiştir.  </br>
+od / bin / ed  </br>
+0000000 **077505** 046106 000402 000400 000000  </br>
+
+- du komutu  </br> 
+du , ne kadar disk alanı kullandığını gösterir.  </br>
+du <dosya / dizin>    (disk blokları cinsinden)  </br>
+
+- df komutu 
+df , bağlı dosya alt sistemlerindeki alanı gösterir.  </br>
+df –k   (disk blokları cinsinden) (bir blok = 512 veya 1024 bayt)  </br>
