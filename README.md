@@ -838,11 +838,11 @@ kümedeki herhangi bir karakter eşleşecek </br>
 ^ 'den sonraki karakterler ile eşleşmeyecek . </br>
 -bir karakter aralığını belirtir. </br>
 Örnekler:</br>
-
-“[fF]un” fun,Fun ile eşleşir. Yani F yada f olmalı.
-“b[aeiou]g” bag, beg, big, bog, bug ile eşleşiyor.
-“[A-Z].*”, Büyük harfle başlayan bir dizeyle eşleşir
-“[^Abc].*”  a, b veya c ile başlamayan dizelerle eşleşir
+ 
+“[fF]un” fun,Fun ile eşleşir. Yani F yada f olmalı. </br>
+“b[aeiou]g” bag, beg, big, bog, bug ile eşleşiyor. </br> 
+“[A-Z].*”, Büyük harfle başlayan bir dizeyle eşleşir </br>
+“[^Abc].*”  a, b veya c ile başlamayan dizelerle eşleşir </br>
 
 - Parantezler (()): gruplamak için kullanılır.</br>
 
