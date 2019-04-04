@@ -762,3 +762,94 @@ du <dosya / dizin>    (disk blokları cinsinden)  </br>
 - df komutu 
 df , bağlı dosya alt sistemlerindeki alanı gösterir.  </br>
 df –k   (disk blokları cinsinden) (bir blok = 512 veya 1024 bayt)  </br>
+
+
+
+## Bölüm-5 Regular Expressions(Düzenli ifadeler)
+
+### RE kullanan UNIX Programları
+
+- grep   (dosya içinde ara).
+- egrep   (genişletilmiş RE'ler ile grep).
+- vi / emacs   (metin editörleri).
+- ex   (çizgi(line) editörü).
+- sed   (akış(stream) editörü).
+- awk   (örüntü(pattern) tarama dili).
+- perl   (betik dili).
+
+
+### Temel ve Genişletilmiş RE'ler
+
+Temel düzenli ifadelerde; </br> 
+meta karakterleri ?, +, {,}, (,), |, ve ) özel bir anlamı yoktur (grep) </br>
+  Onlara özel bir anlam vermek için kaçış versiyonlarını kullanın: \?, \+, \{, \}, \(, \) ve \| </br>
+  
+Genişletilmiş düzenli ifadeler kullanıldığında, bu meta karakterlerin özel bir anlamı vardır </br>
+  grep –E = egrep </br>
+
+### egrep kullanımı 
+
+egrep pattern filename(s)
+
+Güvenli olmasu için, pattern(model) çevresine tırnak işaretleri yerleştirin.
+Örnekler: </br>
+egrep "abc" textfile </br>
+(dosyada “abc” içeren satırları yazdırır) </br>
+egrep -i "abc" textfile </br>
+(yukardakiyle aynı, ancak büyük/küçük harf farkını yoksayar ikisinide gösterir.) </br>
+egrep -v "abc" textfile </br>
+(dosyada “abc” içermeyen satırları yazdırır) </br>
+egrep -n "abc" textfile </br>
+(satır numaralarını ile beraber yazdırır) </br>
+egrep -c "abc" textfile </br>
+(dosyada “abc” içeren satır sayısı yazdırır) </br>
+
+### Metacharacters (Özel karakterler)
+
+- Nokta(period)(.): Herhangi bir karakterle eşleştirir. </br>  
+“a.c”   abc, adc, a&c, a;c, ... ile eşleşir </br>
+“u..x”  unix, uvax, u3(x, ...ile eşleşir </br>
+
+- Yıldız işareti(*): önceki RE'nin sıfır veya daha fazla oluşumuyla eşleşir. </br>  
+Kabuktaki joker karakterlerle(wilcards) aynı değildir! </br>  
+“ab*c” ac, abc, abbc, abbbc, ... ile eşleşir. (yani a karakteri ile c karakteri arasında b karakterinden kaç tane olduğu önemsizdir. çünkü * işareti önceki RE'yi kasteder yani b'yi )</br>  
+“. *” Herhangi bir string'le eşleşir. </br>  
+
+- Artı(+): önceki RE'nin bir veya daha fazla tekrarını eşleştirir </br> 
+“ab+c” abc, abbc ile eşleşir ancak ac ile eşleşmez (yani a karakteri ile c karakteri arasında b karakterinden en az bir tane olmalı, en fazla kaçtane olduğu ise önemsizdir.çünkü * işareti önceki RE'yi kasteder yani b'yi )</br> 
+
+- Soru işareti (?): Önceki RE'nin sıfır veya bir tekrarı ile eşleşir </br> 
+“ab?c” ac, abc ile eşleşir ancak abbc ile eşleşmez </br>  
+
+- Mantıksal veya (|): bar öncesi RE veya bar sonrası RE ile eşleşir </br> 
+“abc | def”, abc veya def ile eşleşir </br> 
+
+- Şapka (^): satırın başlangıcı anlamına gelir </br>
+“^D.*”, D ile başlayan bir satırla eşleşir </br>
+
+- Dolar işareti ($) satır sonu anlamına gelir </br>
+“.*d$”, d ile biten bir satırla eşleşir
+
+- Ters eğik çizgi (\): diğer meta karakterlerden kaçar yani meta karakterler ile normal karakterlerin karışmasını önler</br> 
+“file\.txt”, file.txt ile eşleşiyor ancak file_txt ile eşleşmiyor</br>
+
+- Köşeli parantez ([]): bir karakter kümesi listesini belirtir. </br>
+kümedeki herhangi bir karakter eşleşecek </br>
+^ 'den sonraki karakterler ile eşleşmeyecek . </br>
+-bir karakter aralığını belirtir. </br>
+Örnekler:</br>
+
+“[fF]un” fun,Fun ile eşleşir. Yani F yada f olmalı.
+“b[aeiou]g” bag, beg, big, bog, bug ile eşleşiyor.
+“[A-Z].*”, Büyük harfle başlayan bir dizeyle eşleşir
+“[^Abc].*”  a, b veya c ile başlamayan dizelerle eşleşir
+
+- Parantezler (()): gruplamak için kullanılır.</br>
+
+“a(bc)*” ifadesi a, abc, abcbc, abcbcbc, ... ile eşleşir.</br>
+“(foot|base)ball” football ya da baseball ile eşleşir</br>
+
+- Süslü Parantez ({}): bir RE'nin tekrar sayısını belirtmede kullanılır. </br>
+
+“[a-z]{3}” üç küçük harfle eşleşiyor.Yani en az üç küçük harf barındırıyorsa </br>
+“m.{2,4}” dizeleri m ve ardından 2 ile 4 karakter arasında eşleştirir. </br>
