@@ -144,8 +144,9 @@ Ana dizininize giden yol, ~ (tilde) sembolüyle belirtilebilir.
 Kullanıcı1'in ana dizini ~ kullanıcı1 şeklinde belirtilebilir.
 Başka bir dizindeysek cd ~/ komutunu vererek ana dizine gidebiliriz.
 
-### Unix Dosyası Hiyerarşisi
- (foto)
+### Unix Dosya Hiyerarşisi
+
+ ![foto1](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-2/photo1.png)
  
 Kök dizini(Root directory) : / , bütün dosyalar root'a bağlanır.
 Dizinler düz dosyalar veya başka dizinler içerebilir.
@@ -194,7 +195,7 @@ cd ../../user1
 
 ### Dosya bilgisi (ls -al) </br>
 
-(foto)
+ ![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-2/photo2.png)
 
 ### Dosya türleri 
 
@@ -291,7 +292,7 @@ sembolik bir bağ (-s) oluşturur. </br>
 link_name, başka bir dizinde veya başka bir fiziksel makinede bulunabilecek varolan dosyanın bir göstergesidir. </br>
 hard link(sert bir bağlantı) oluşturmaktan kaçınılmalıdır,aynı cihazın aynı fiziksel bölümünde olmalıdır; link_name, mevcut dosya için başka bir addır. </br>
 
-(foto)
+ ![foto3](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-2/photo3.png)
 
 ln -s fileA fileB  yazarsak, oluşmamış fileB dosyasına sembolik link oluşturuluyor ve fileA'yı işaret ediyor.Oluşturulan bu fileB'ye farklı bir inode atanıyor fakat yapı gereği fileA'ı işaret ediyor.Eğer fileA'da içerik değişirse fileB'de de bu değişiklik görülür. fileB yani sembolik link olam dosyaya birşey yazılırsa fileA'da da içerik değişir çünkü fileB, fileA'nın bölgesini işaret ediyor. </br>
 
@@ -321,7 +322,7 @@ Dosyalara veya dizinlere erişime izin vermek veya vermemek için kullanılan iz
 
 - chmod <mode> <file(s)>  komutu 
  
- (foto)
+  ![foto4](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-2/photo4.png)
 
 chmod komutu dosya sahibini(owner) değiştirmede kullanılır.Genellikle sadece root bu komutu kullanabilir.Yukarıda görüldüğü gibi chmod komutu iki farklı şekilde kullanılır; </br>
 Daha çok kullanılan sayılar kullanılarak verilen izinlerdir sayılar belirli bir düzene göre verilebilir;
