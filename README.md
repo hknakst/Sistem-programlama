@@ -895,3 +895,148 @@ Standart 3 bölümlü formda öğrenci kimliği içeren satırlar. </br>
 Ardışık 2 büyük harfli sözcük içeren satır sayısı. </br>
 Alfabetik karakterle bitmeyen satır sayısı. </br>
 Bir cümlenin sonunda sesli harfle başlayan bir kelimeyi içeren satırlar. </br>
+
+
+## Bölüm-6 UNIX Kabuk Ortamları
+
+### Kabuk özellikleri
+
+Kullanıcı ve işletim sistemi arasındaki komut satırı arayüzüdür. </br>
+Giriş sırasında otomatik olarak başlar. </br>
+Hem komut yorumlayıcısı hem de programlama dilidir. </br>
+Kabuk betiği(Shell script), kabuk yorumlaması için mantık içeren bir metin dosyasıdır. </br>
+
+### Kabuk Etkileşimi
+
+- Komut satırı ayrıştırma(parsing)  </br>
+- Ortam </br>
+- Metin tamamlama (tab tuşu ile) </br>
+- Takma adlar.(Aliases) </br>
+- Komut satırı düzenleme </br>
+- Komut geçmişi </br>
+- Yapılandırma. </br>
+
+### Kabuk Programlama
+
+- Değişkenler
+- Kontrol Yapıları (Döngüler ve şartlamalar).
+- Fonksiton tanımı ve çağırma.
+- Kabuk betiği(scripts).
+- Sonraki bölüm.
+
+### Çeşitli Unix Kabukları
+
+- sh (Bourne kabuğu, orijinal Unix kabuğu)
+- ksh (Korn kabuğu)
+- csh (Berkeley'de geliştirilen C kabuğu)
+- tcsh
+- bash (Bourne Kabuğu.) Linux'ta varsayılan kullanıcı kabuğu
+...
+Çoğunlukla etkileşim düzeyindeki farklılıklar desteklenir. </br>
+http://www.faqs.org/faqs/unix-faq/shell/shell-differences/ </br>
+
+### Kabuk Özellikleri. 
+(foto)
+
+### Bourne Again SHell (bash)
+
+Bash bu döküman için standart kabuktur.  </br>
+Bourne kabuğunun üst kümesidir(sh).  </br>
+Sh, csh, tcsh & ksh'dan ödünç alınan özellikler vardır.  </br>
+GNU projesinin bir parçasıdır.  </br>
+
+### Değişkenler
+
+Çalışan bir kabuk için üç ana değişken türü vardır; </br>
+
+Yerel(local) değişkenler; </br>
+Şu anki kabuğun içinde mevcut olan değişkenlerdir.
+Komut isteminde, değişkene değer atanır. </br>
+
+Ortam(environment) Değişkenleri; </br>
+Herhangi bir alt kabuk işlemi(child process) için kullanılabilir</br>
+
+Kabuk değişkenleri; </br>
+ Kabuk tarafından değer atanması(set) gerekir. </br>
+ 
+### Kabuk Değişkenleri
+
+Kabuğun belirli işlemler için kullandığı değişkenler kümesidir. </br>
+Kabuk değişkenleri şunları içerir: </br>
+- yerel değişkenler
+- Ortam Değişkenleri
+
+-env komutu </br>
+
+Geçerli ortam değişkenlerinin listesi, env komutu ile görüntülenebilir. </br>
+Değişkenlerin bir adı ve değeri vardır.Varname değerini(listedeki herhangi bir değişkenin adı), echo $varname ile standart çıktıya gönderilerek terminale yazdırılabilir. </br>
+
+
+### Ortam Değişkenleri
+
+Bazı ilginç değişkenler: HOME, PWD,PATH, PS1, USER, HOSTNAME </br>
+$ HOME: home dizini (cd için varsayılan değişken)</br>
+Örnek: /home/0607/student </br>
+$ PWD: mevcut çalışma dizini </br>
+Örnek: /export/home/staff/usern </br>
+$ PATH: komutlar için arama yolu </br>
+Örnek: /usr/local/bin:/bin:/usr/bin </br>
+$ PS1: komut istemi (varsayılan “$”) </br>
+Örnek: \u@\h:\w\$ </br> 
+$ USER: kullanıcı adı </br>
+Örnek: usern </br>
+$ HOSTNAME: bilgisayar hostname </br>
+Örnek: ktuce </br>
+
+Diğer ilginç değişkenler: UID, PPID, RANDOM, HISTFILE, HISTSIZE, MAIL, MAILCHECK, PS2 </br>
+$ UID: mevcut kullanıcı kimliği </br> 
+$ PPID: Kabuğu çalıştıran programın işlem kimliği </br> 
+$ RANDOM: 0-32767 arasında rastgele bir tam sayı oluşturur </br>
+$ HISTFILE: komut geçmişini saklamak için dosya </br>
+$ HISTSIZE: saklanacak komut sayısı </br>
+$ POSTA: posta gelmişmi diye kabuk tarafından kontrol edilen dosya </br>
+$ MAILCHECK: kontroller arasındaki saniye sayısı </br>
+$ PS2: İkincil komut istemi (varsayılan ">") </br>
+
+### Değişkenlere atama
+
+Değişkeni varname = value ile ayarlayın </br>
+PS1 = $USER@$HOSTNAME: </br>
+   Varsayılan kabuk istemini değiştir </br>
+PS1 = "bash_prompt>" </br> 
+PATH = $PATH:$HOME/bin , $HOME/bin yolu PATH değişkenine atandı</br> 
+PATH = $PATH:~:.  ,  ~ :. PATH'a atandı </br>
+DATE=\`date\` veya DATE=$(date)  , DATE değişkeni oluşturduk ve bu değişkene sistem saatini atadık.</br>
+
+
+### Metin Tamamlama
+
+<tab> geçerli komutu veya dosya adını tamamlama girişiminde bulunur. </br>
+pus<tab> genişler(tamamlar) için pushd<space> </br>
+pu <tab> alternatifleri verir. yani pu ile başlayan alternatif komutları gösterir bazen 2 kez <tab> yapmak gerebiliyor.</br>
+   pu pup pushd </br>
+/etc içinde, ls init <tab> girildiğinde aşağıdakileri verir </br>
+init init.d. initpipe inittab </br>
+[lecture]$ ls init </br>
+
+### Aliases (Takma adlar)
+
+Takma adlar, sık kullanılan komutlar için kısa yol olarak kullanılır. </br>
+Sözdizimi: alias kısayol=komut </br>
+Örnekler: </br>
+alian asd=ls  (artık ls komutuna asd adında bir kısayol atadım terminale asd yazdığım zaman ls komutunu çalıştıracak. </br>
+alias pu=pushd </br>
+alias po=popd </br>
+alias l= " ls –F -C " </br> 
+alias ll= " ls –L –l -F " </br>
+alias d=dirs </br>
+alias hide= " chmod og-rwx " </br>
+alias unhide= " chmod og+r " </br>
+
+### Komuta Tarihi(geçmişi)
+
+- history komutu</br>
+
+history,önceden girilmiş komutları listelemek için kullanılır.</br>
+M'den n'ye kadar önceden yazılmış komutları listelemek için (fc -l <m> <n>) kullanılabilir.Bu komutla ilk m ile başlayan satırdan sonra ilk n ile başlayan satıra kadarki geçmiş komutları yazdırır. fc -l ls man tarzı bir kullanımda mümkündür</br>
+Geçmiş listesinde gezinmek için imleç tuşlarını yukarı ve aşağı kullanılabilir.</br>
