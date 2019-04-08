@@ -1038,5 +1038,69 @@ alias unhide= " chmod og+r " </br>
 - history komutu</br>
 
 history,önceden girilmiş komutları listelemek için kullanılır.</br>
-M'den n'ye kadar önceden yazılmış komutları listelemek için (fc -l <m> <n>) kullanılabilir.Bu komutla ilk m ile başlayan satırdan sonra ilk n ile başlayan satıra kadarki geçmiş komutları yazdırır. fc -l ls man tarzı bir kullanımda mümkündür</br>
+m'den n'ye kadar önceden yazılmış komutları listelemek için (fc -l <m> <n>) kullanılabilir.Bu komutla ilk m ile başlayan satırdan sonra ilk n ile başlayan satıra kadarki geçmiş komutları yazdırır. fc -l ls man tarzı bir kullanımda mümkündür</br>
 Geçmiş listesinde gezinmek için imleç tuşlarını yukarı ve aşağı kullanılabilir.</br>
+
+### Komut Satırında Düzenleme
+
+bash bir dizi satır düzenleme komutu sağlar.</br>
+Varsayılan emacs modu komutları.(Terminalde komut yazarken uygulanabilecek kısa yollar.) </br>
+   Esc-b Bir kelime geri git </br>
+   Esc-f Bir kelime ileri git  </br>
+   Ctrl-a Satırın başına gitme </br>
+   Ctrl-e Satırın sonuna gitme </br>
+   Ctrl-k İmleçten satır sonuna kadar olan metini siler.  </br>
+Diğer taraftan, ksh kullanıyorsanız komut satırını etkileşimli olarak birkaç şekilde düzenleyebilirsiniz. </br>
+   set -o vi, komut satırını düzenlemek için vi komutlarını kullanmanızı sağlar. </br>
+   set -o vi-tabcomplete ayrıca bir TAB girerek komutları/dosya adlarını tamamlamanıza izin verir. </br>
+   
+   
+### Login(giriş) Script'leri
+
+Her oturum açtığınızda takma adlar, ortam değişkenleri, komut satırı düzenlemeleri vb. Girmek istemezsiniz. </br>
+Bütün bunlar, kabuk her başlatıldığında çalıştırılan bir betikte(script) yapılabilir. </br>
+
+Başlangıçta çalıştırılan başlangıç komut dosyaları; </br>
+&nbsp;  /etc/profile </br>
+&nbsp;  ~/.bash_profile  </br>
+ &nbsp;&nbsp;    ~/.bash_login (eğer .bash_progile yoksa) </br>
+&nbsp;    ~/.profile (eğer ikiside yoksa) </br>
+
+Giriş yaptıktan sonra komut dosyası çalıştırıldı </br>
+&nbsp;&nbsp;    ~/.bashrc </br>
+Oturum kapatıldıktan sonra komut dosyası çalıştırıldı </br>
+&nbsp;&nbsp;  ~/.bash_logout </br>
+   
+   
+örnek .bash_ profile (partial);</br>
+
+\# .bash_ profile: oturum açma kabukları için bash tarafından yürütülür. </br>
+umask 022 (0666 & ~022 = 0644 = rw-r--r--) </br>
+\# varsa, .bashrc komutunu ekleyin </br>
+if [ -f ~/.bashrc ]; then </br>
+&nbsp;&nbsp; . ~/.bashrc </br>
+fi </br>
+\# değişkenleri ayarla </br> 
+export CVSROOT=~/.cvsroot </br>
+export EDITOR=/bin/vi </br>
+export PAGER=/usr/bin/less </br>
+
+
+örnek .bashrc (partial)</br>
+
+\# .bashrc
+\# bazı genel komutların kısaltmaları
+alias bye=logout
+alias h=history
+alias l='ls –F -C'
+alias ll='ls-L –l -F'
+alias po=popd
+alias pu=pushd
+
+Csh için, giriş kabukları çalıştırılır: </br> 
+  ~/.profile </br>
+ENV ayarlanmışsa: </br>
+  &nbsp; Bu dosya her yeni terminal için yürütülür </br>
+  &nbsp; örnek: </br>
+    &nbsp;&nbsp;ENV=$HOME/.cshrc </br>
+   &nbsp;&nbsp;EXPORT ENV (for bash) </br>
