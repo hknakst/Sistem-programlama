@@ -58,7 +58,7 @@ Dosyanın hangi shell ile koşacağını belirtmek için;
 
 /bin/bash: Burada belirtilmesi gereken diğer bir konu da sisteminizde hangi bash yazılımını kullandığınızdır. which bash komutunun sonucu size mutlak adresi söyleyecektir. #! ifadesinden sonra herhangi bir bash adresi yazmasanız da Script çalışabilir. Fakat sizin yazdığınız Script başka bir sistemde çalıştırılmak istendiğinde hata verme ihtimali vardır. Bu sebeple bash adresini yazmayı alışkanlık haline getirmek daha sağlıklı olacaktır.
 
-- #ifadesiyle başlayan satırlar yorum satırlarıdır. 
+- \# ifadesiyle başlayan satırlar yorum satırlarıdır. 
 
 Bu satırları Bash yorum olarak farz edecek ve işleme almayacaktır. Dosyanın sahibi, oluşturulma tarihi ve oluşturulma maksadı vb. bilgilere burada yer verebilirsiniz.(not: bash=>komut dili yorumlayıcısı)
 
@@ -88,14 +88,14 @@ argümanlarla komuş işlemini değiştirebiliyoruz, daha detaylı listeleme gib
 - ls -al textfile1 textfile2
 - ls -al directory
 
-ls -l komutu ile dosların ve dizinlerin çok daha detaylı(izinler,kullanıcı ve grup bilgileri, oluşturulma tarihi vb.) halini liste şeklinde görebiliriz.
-ls -a komutu gizli dosya ve dizinleri görebiliriz.
-ls -la veya ls -al komutuylada ls -l ve ls -a komutlarını beraber kullanabiliriz.
-ls -a;ls -l şeklinde de iki komut calıştırılabilir.
-ls bin komutuda bin klasöründekileri listeler
+ls -l komutu ile dosların ve dizinlerin çok daha detaylı(izinler,kullanıcı ve grup</br> bilgileri, oluşturulma tarihi vb.) halini liste şeklinde görebiliriz.
+ls -a komutu gizli dosya ve dizinleri görebiliriz.</br>
+ls -la veya ls -al komutuylada ls -l ve ls -a komutlarını beraber kullanabiliriz.</br>
+ls -a;ls -l şeklinde de iki komut calıştırılabilir.</br>
+ls bin komutuda bin klasöründekileri listeler</br>
 ls textfile1 textfile2 yazarsakta bu dosyaları listeler.
 
-Bir komut satırında komut icra ettiğinzde sistem komutu veya programı ise;
+Bir komut satırında komut icra ettiğinzde sistem komutu veya programı ise;</br>
 shell fork() ile iki süreçe ayrılır(parent ve child), child süreç exec() ile komutu icra eder bu sırada parent süreci bekler ve arka planda komut yürütülürse devam eder.
 shell kendi parça komutu ise herhangi bir child süreç oluşturmadan icra eder.(cd,export,echo... kendi komutlarını kendi icra eder yeni bir süreç oluşturmaz.
 
@@ -165,6 +165,7 @@ Absolute path kullanıcı dizini referans alınarak bildirim yapar.
 Relative path(göreceli yol): çalışma dizininden başlar. </br>
 - ..  bir üst dizindir(parent)
 - .  çalışma dizinidir(yani dizinin kendisini ifade eder.
+
 textfile </br>
 bil318/lec1.txt </br>
 çalışma dizinini referans alma : ./../textfile </br>
@@ -188,9 +189,9 @@ Bu dizinler / yani root altındadır. </br>
 
 - cd komutu </br>
 
-Çalışma dizinini değiştirmek için kullanılır. cd <dizin yolu> şeklinde kullanılır. Absolute veya relative yollar kullanılabilir. </br>
-Herhangi bir argüman verilmezse cd ~ komutu verilmiş varsayılır ve home dizinine gidilir.Eğer .. parametresi verilirse bir üst dizin . parametresi verilirse de mevcut çalışma dizinine gidilir. </br> 
-cd /home/user1
+Çalışma dizinini değiştirmek için kullanılır. cd \<dizin yolu> şeklinde kullanılır. Absolute veya relative yollar kullanılabilir. </br>
+Herhangi bir argüman verilmezse cd ~ komutu verilmiş varsayılır ve home dizinine gidilir.Eğer ..(ikinokta) parametresi verilirse bir üst dizin .(teknokta) parametresi verilirse de mevcut çalışma dizinine gidilir. </br> 
+cd /home/user1 </br>
 cd ../../user1
 
 ### Dosya bilgisi (ls -al) </br>
@@ -199,26 +200,26 @@ cd ../../user1
 
 ### Dosya türleri 
 
-Plain (düz) (-): çoğu dosya bu türdedir, ikili veya metin dosyaları. </br>
+Plain (düz) (-): çoğu dosya bu türdedir, ikili(binary) veya metin dosyaları. </br>
 Directory (dizin) (d): bir dosya kümesini gösterir </br>
 Symbolic (sembolik) link (l): Başka bir dosya veya dizine işaretçi(pointer).</br>
-Özel dosyalar </br>
-      Karakter cihazı (c): klavye, yazıcı, joystick.</br>
-      Block cihazı (b): disk, CD-ROM.</br>
-İletişim dosyaları</br>
-      FIFO (p): geçici bir depolama cihazı (sıra).</br>
-      Soket (ler): soket dosyaları </br>
+Özel dosyalar; </br>
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Karakter cihazı (c): klavye, yazıcı, joystick.</br>
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Block cihazı (b): disk, CD-ROM.</br>
+İletişim dosyaları;</br>
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FIFO (p): geçici bir depolama cihazı (sıra).</br>
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Soket (ler): soket dosyaları </br>
 
 - ls -F komutu
 
 ls -F komutu bir dosyanın türünün ne olduğunu gösterir ve dosyanın adının sonuna özel bir karakter yazdırılır.</br>
 
 (boş): Normal dosya</br>
-*: Yürütülebilir program veya komut dosyası</br>
-/: Dizin </br>
-@ : Sembolik bağlantı </br>
-| : FIFO (named pipe)
-=: Soket </br>
+*:&nbsp;&nbsp; Yürütülebilir program veya komut dosyası</br>
+/:&nbsp;&nbsp; Dizin </br>
+@ :&nbsp;&nbsp; Sembolik bağlantı </br>
+| :&nbsp;&nbsp; FIFO (named pipe)
+=:&nbsp;&nbsp; Soket </br>
 
 -ls -i komutu
 
@@ -337,7 +338,7 @@ chmod g-r a.txt 	yazarsak gruplardan okuma yetkisini alır veya benzer şekilde 
 
 chgrp asd a.txt		yazarak a.txt dosyasının grubunu değiştirerek asd grubuna alabiliriz.
 
--chown komutu 
+- chown komutu 
 
 chown hkn a.txt		yazarak a.txt dosyasını başka bir kullanıcıdan alıp hkn kullanıcısına verebiliriz.
 
@@ -520,7 +521,7 @@ cat file1 >> file2 (file1 dosyasını file2ye yazar ama file2deki mevcut bilgiyi
 ### stdin yönlendirme
 
 stdin'in terminalden okumak yerine bir dosyadan okumasını söyleyebiliriz. </br>
-<filename : stdin'i mevcut bir dosyaya yönlendirir.
+<filename : stdin'i mevcut bir dosyaya yönlendirir. </br> 
 <<kelime  : takip eden satırlandarn sadece kelime'yi içeren satırada kadar, stdin'i yönlendirir. örneğin; </br>
 mail user@domain.com < message.txt </br>
 at 3am < cmds or at 0945 < cmds </br>
@@ -831,8 +832,8 @@ Kabuktaki joker karakterlerle(wilcards) aynı değildir! </br>
 - Dolar işareti ($) satır sonu anlamına gelir </br>
 “.*d$”, d ile biten bir satırla eşleşir
 
-- Ters eğik çizgi (\): diğer meta karakterlerden kaçar yani meta karakterler ile normal karakterlerin karışmasını önler</br> 
-“file\.txt”, file.txt ile eşleşiyor ancak file_txt ile eşleşmiyor</br>
+- Ters eğik çizgi (\\): diğer meta karakterlerden kaçar yani meta karakterler ile normal karakterlerin karışmasını önler</br> 
+“file\\.txt”, file.txt ile eşleşiyor ancak file_txt ile eşleşmiyor</br>
 
 - Köşeli parantez ([]): bir karakter kümesi listesini belirtir. </br>
 kümedeki herhangi bir karakter eşleşecek </br>
@@ -966,7 +967,9 @@ Kabuk değişkenleri şunları içerir: </br>
 - yerel değişkenler
 - Ortam Değişkenleri
 
--env komutu </br>
+</br> 
+
+- env komutu </br>
 
 Geçerli ortam değişkenlerinin listesi, env komutu ile görüntülenebilir. </br>
 Değişkenlerin bir adı ve değeri vardır.Varname değerini(listedeki herhangi bir değişkenin adı), echo $varname ile standart çıktıya gönderilerek terminale yazdırılabilir. </br>
@@ -1002,7 +1005,7 @@ $ PS2: İkincil komut istemi (varsayılan ">") </br>
 
 Değişkeni varname = value ile ayarlayın </br>
 PS1 = $USER@$HOSTNAME: </br>
-   Varsayılan kabuk istemini değiştir </br>
+&nbsp;&nbsp;   Varsayılan kabuk istemini değiştirir </br>
 PS1 = "bash_prompt>" </br> 
 PATH = $PATH:$HOME/bin , $HOME/bin yolu PATH değişkenine atandı</br> 
 PATH = $PATH:~:.  ,  ~ :. PATH'a atandı </br>
@@ -1011,9 +1014,9 @@ DATE=\`date\` veya DATE=$(date)  , DATE değişkeni oluşturduk ve bu değişken
 
 ### Metin Tamamlama
 
-<tab> geçerli komutu veya dosya adını tamamlama girişiminde bulunur. </br>
-pus<tab> genişler(tamamlar) için pushd<space> </br>
-pu <tab> alternatifleri verir. yani pu ile başlayan alternatif komutları gösterir bazen 2 kez <tab> yapmak gerebiliyor.</br>
+\<tab> geçerli komutu veya dosya adını tamamlama girişiminde bulunur. </br>
+pus\<tab> genişler(tamamlar) için pushd\<space> </br>
+pu\<tab> alternatifleri verir. yani pu ile başlayan alternatif komutları gösterir bazen 2 kez \<tab> yapmak gerebiliyor.</br>
    pu pup pushd </br>
 /etc içinde, ls init <tab> girildiğinde aşağıdakileri verir </br>
 init init.d. initpipe inittab </br>
@@ -1038,7 +1041,7 @@ alias unhide= " chmod og+r " </br>
 - history komutu</br>
 
 history,önceden girilmiş komutları listelemek için kullanılır.</br>
-m'den n'ye kadar önceden yazılmış komutları listelemek için (fc -l <m> <n>) kullanılabilir.Bu komutla ilk m ile başlayan satırdan sonra ilk n ile başlayan satıra kadarki geçmiş komutları yazdırır. fc -l ls man tarzı bir kullanımda mümkündür</br>
+m'den n'ye kadar önceden yazılmış komutları listelemek için (fc -l \<m> \<n>) kullanılabilir.Bu komutla ilk m ile başlayan satırdan sonra ilk n ile başlayan satıra kadarki geçmiş komutları yazdırır. fc -l ls man tarzı bir kullanımda mümkündür</br>
 Geçmiş listesinde gezinmek için imleç tuşlarını yukarı ve aşağı kullanılabilir.</br>
 
 ### Komut Satırında Düzenleme
@@ -1063,11 +1066,11 @@ Bütün bunlar, kabuk her başlatıldığında çalıştırılan bir betikte(scr
 Başlangıçta çalıştırılan başlangıç komut dosyaları; </br>
 &nbsp;  /etc/profile </br>
 &nbsp;  ~/.bash_profile  </br>
- &nbsp;&nbsp;    ~/.bash_login (eğer .bash_progile yoksa) </br>
-&nbsp;    ~/.profile (eğer ikiside yoksa) </br>
+ &nbsp;&nbsp; &nbsp;&nbsp;    ~/.bash_login (eğer .bash_progile yoksa) </br>
+&nbsp; &nbsp;&nbsp; &nbsp;    ~/.profile (eğer ikiside yoksa) </br>
 
 Giriş yaptıktan sonra komut dosyası çalıştırıldı </br>
-&nbsp;&nbsp;    ~/.bashrc </br>
+&nbsp;&nbsp;   ~/.bashrc </br>
 Oturum kapatıldıktan sonra komut dosyası çalıştırıldı </br>
 &nbsp;&nbsp;  ~/.bash_logout </br>
    
@@ -1078,7 +1081,7 @@ Oturum kapatıldıktan sonra komut dosyası çalıştırıldı </br>
 umask 022 (0666 & ~022 = 0644 = rw-r--r--) </br>
 \# varsa, .bashrc komutunu ekleyin </br>
 if [ -f ~/.bashrc ]; then </br>
-&nbsp;&nbsp; . ~/.bashrc </br>
+&nbsp;&nbsp; &nbsp;&nbsp;. ~/.bashrc </br>
 fi </br>
 \# değişkenleri ayarla </br> 
 export CVSROOT=~/.cvsroot </br>
@@ -1104,3 +1107,219 @@ ENV ayarlanmışsa: </br>
   &nbsp; örnek: </br>
     &nbsp;&nbsp;ENV=$HOME/.cshrc </br>
    &nbsp;&nbsp;EXPORT ENV (for bash) </br>
+
+
+## Temel Kabuk Betiği (basic shell script)
+
+Bir kabuk betiği nedir?
+
+.......
+
+### Komut dosyası yürütme (Script Execution)
+
+komut dosyasını bir argüman gibi kabuk komutuna verin;</br>
+bash my_script</br>
+
+veya komut dosyasının ilk satırında kabuğu(shell) belirleyin; </br>
+\#!/bin/bash </br>
+&nbsp;&nbsp; komut dosyasının çalıştırılabilir olduğundan emin olun. </br>
+&nbsp;&nbsp; my_script 'i doğrudan komut satırında çalıştırın.
+
+Derlemek yoktur, kabuk tarafından yorumlanır.</br>
+
+Basit bir script;</br>
+\#!/bin/bash</br>
+echo "Hello, World!"</br>
+path=$(pwd)</br>
+echo $path</br>
+
+Result:</br>
+Hello, World!</br>
+/home/user2</br>
+
+
+## Kabuk Değişkenleri
+- Numeric (Sayısal)</br>
+- String(Dize)</br>
+- Arrays (Diziler)</br>
+- Komut satırı argümanları; yalnızca okur
+- Fonksiyonlar
+- var değişkenin adını belirtir, $ var değere</br>
+  var = 100 &nbsp;&nbsp;  \# değeri 100 olarak ayarlar </br>
+echo ”\\$ var = $ var”  &nbsp;&nbsp; \# $ var = 100 yazdıracak
+- unset var ile, bir değişkeni kaldırabiliriz.
+- İsimler bir harfle başlar ve harf, rakam ve alt çizgi içerebilir.
+
+
+##Sayısal Değişkenler
+
+Tamsayı değişkenleri bash'te kullanılabilecek tek saf sayısal değişkenlerdir.</br>
+beyan(declaration) ve set değeri:</br>
+- declare -i var = 100</br>
+
+Sayısal ifadeler çift parantez içine alınır (C stilinde).</br> Genel format:
+
+var = $((ifade)) veya var = $[ifade] </br>
+Örneğin. i = $((var ++)) veya ((var + = 1))</br>
+Örneğin. i = $((var2 = 1 + $ var)) veya ((var2 = 1 + var))</br>
+Örneğin. i = $[var + 2] - [var + = 2] Hata!</br>
+Örneğin. echo $((var * 7)) veya echo $[var * 7]</br>
+Örneğin. echo ((var2 = 1 + var)) veya echo [var2 = 1 + var]</br>
+
+
+Operatörler C / C ++ ile aynıdır.</br>
+! +, -, *, /,%, &, |, <,>, <=,> =, ==, =, &&, ||,
+\+ =, -! =, * =, / =,% = ~, ~ =, <<, >>, ^
+
+
+### Dize(string) Değişkenleri 
+Açıkça başka bir tür olarak bildirilmediği sürece, değişkenler string'dir.</br>
+var = 100, var'ı "100" string'i yapar.</br>
+Bununla birlikte, değişkeni çift parantez içine koymak bir tamsayı olarak kabul edilir. ((var2 = 1 + $ var))
+
+
+Alt stringlerin kullanılması;</br>
+- ${string:n}  \# n: index </br>
+ &nbsp;&nbsp;&nbsp;${string:5}  \# ilk 5 karakter haric</br>
+ &nbsp;&nbsp;&nbsp;${string:(-2)}  \# son iki karakter</br>
+- ${string:n:m}  \# n: index, m: number</br>
+&nbsp;&nbsp;&nbsp; ${string:0:5}  \# ilk 5 karakter</br>
+ &nbsp;&nbsp;&nbsp; ${string:1:3}  \# 2.ile 4. arasındaki 3 karakter</br>
+- ${#string}  \# length of string</br>
+
+Birleştirilen strings;</br>
+- var1="$var1 $var2"</br>
+
+ Manipüle string</br>
+ - y=${x:${#x}-1}${x:1:${#x}-2}${x:0:1}</br>
+ bu örnekte x string'inin ilk ve son karakterleri değiştirilerek y'ye atanır.
+
+
+Değişkenin Yerine koyma;</br>
+- $name veya ${name} # name değerini kullanır </br>
+- ${name:-value} # eğer name ayarlanmadıysa, değeri(value) kullan
+- ${name:=value} # name ayarlanmadıysa, değeri kullanın ve name'e degeri ata
+- ${name:?value} # name ayarlanmadıysa, değeri stderr'e yazın
+- ${name:+value} # eğer name ayarlanmışsa, değeri kullanın; aksi takdirde null kullanın
+- ${name%pattern} # en küçük sonek kalıbını kaldır
+- ${name%%pattern} # en büyük sonek kalıbını kaldır
+- ${name#pattern} # en küçük önek kalıbını kaldır
+- ${name##pattern} # en büyük önek kalıbını kaldır
+
+Dosya adı değiştirme karakterleri (*,?, [...],!) modelde kullanılabilir.
+
+
+### Dizi Değişkenleri
+
+- Dizi bir değerler listesidir. Boyut bildirmek zorunda değilsiniz
+- Bir değere $ {name [index]} ile referans verilebilir.
+ - ${a[3]}&nbsp;&nbsp;&nbsp;&nbsp; #dördüncü konumdaki değer
+- $a  &nbsp;&nbsp;&nbsp;&nbsp;#${a[0]} ile aynıdır
+
+Bir dizi bildirmek için declare –a komutu kullanılabilir.
+- declare -a sports 
+- sports=(basketball football soccer)
+- spor [3] = hokey
+
+- dizi oluşturma </br> 
+sports=(football basketball) </br>
+moresports=($sports tennis) </br>
+- ${array[@]} or ${array[*]} dizinin tüm içeriğini belirtir.</br>
+echo ${moresports[*]} </br>
+Çıkış: football tennis </br>
+- ${#array[*]} dizideki değerlerin sayısını döndürür.
+echo ${#moresports[*]}
+Output: 2
+
+### Dışa aktarılan değişkenler 
+
+Export komutu , kabuğun alt(child) süreçlerin değişkene erişmesine izin verir.</br>
+- export \<variables>
+- declara -x \<vars>
+
+export –p değişkenlerin ve kabuğunuz tarafından verilen değerlerin bir listesini gösterir.
+
+vartest bir program</br>
+$> cat vartest</br>
+echo x = $x</br>
+echo y = $y</br>
+$> x=100</br>
+$> y=10</br>
+$> vartest</br>
+x =</br>
+y =</br>
+$> export y</br>
+$> vartest</br>
+x =</br>
+y = 10</br>
+
+
+Parantez içinde bir veya daha fazla komut alt kabukta yürütülür</br>
+- $> (cd kutusu; ls;)</br>
+Cwd'yi değiştirmeyen bin dizinindeki dosyaları listele</br>
+- $> (prog1; prog2; prog3) 2> error.txt &</br>
+Arka planda üç program yürütür.</br
+error.txt dosyasına üç programdaki hataları yazar
+- $> x=50; (x=100); echo $x 50 çıktılar
+
+Kıvrımlı ayraçlar içindeki bir veya daha fazla komut geçerli kabuk tarafından yürütülür
+- $> {cd bin; ls; }
+Cwd'yi değiştiren bin dizinindeli dosyaları listeler
+- $> x=50; {x =100; }; echo $x çıktı 100
+Giriş ve çıkış bu yapılardan piped yapılabilir. ve G / Ç yönlendirilebilir.
+
+### Komut Satırı Argümanları
+
+Eğer argümanlar bir betiğe(script) geçirilirse, $1,$2,$3, vb. Değerlere sahiptirler. </br>
+- $0, betiğin(script) adıdır. </br>
+- $*, $0 hariç, boşluklarla ayrılmış tüm argümanların bir dizesidir.
+- $@, $0 hariç argümanların bir dizisidir.
+- $#, argümanların sayısıdır.
+
+### Çıktı ve alıntılama(quoting)
+
+- echo message  , &nbsp;&nbsp;&nbsp;&nbsp;stdout'a yazdırır.
+- echo –n "yes/no? " , &nbsp;&nbsp;&nbsp;&nbsp;bir bilgi istemi
+Çıktıdan sonra yeni satır(newline) yazdırmıyor.
+
+Shell, $ ve ‘ ‘(çift tırnak) işaretleri içindeki ifadeleri yorumlar
+- $ —değşken yerine geçer
+- ‘ —komut yerine geçer
+echo "\`date +%D`"   &nbsp;&nbsp;&nbsp;&nbsp; # 04/30/05
+
+Shell özel karakterleri tek tırnak işaretleri içinde yorumlamaz.
+- echo '\`date +%D\`' &nbsp;&nbsp;&nbsp;&nbsp; # \`date +%D`
+
+- \\ &nbsp;,&nbsp;&nbsp; karakterlerden kaçmak için kullanılır (örneğin, \ ”, \ $)
+
+### Dönüş değerleri(Return values)
+Komut dosyaları bir tamsayı değeri döndürebilir</br>
+return N kullanılır.</br>
+$? Değişkeni Son çalıştırılan komutun dönüş değerini içerir. </br>
+Koşulları test etmek için kullanılabilir </br>
+$> pwd</br>
+/home/user</br>
+$> echo $?</br>
+0</br>
+$> pwdd</br>
+pwdd: not found</br>
+$> echo $?</br>
+127</br>
+
+### Kullanıcı tanımlı değişkenler
+
+Örnekler:</br>
+- $> name =Ali , name değişkenine Ali değeri atanır</br>
+- $> echo $ name , Ali görüntülenecek</br>
+- $> echo Hello $name! , Welcome to $HOME
+ ,bunun bilgisayarınızda çıktısını görün.
+
+Değişken isimleri:</br>
+__FRUIT, TRUST_NO_1, _2_TIMES (geçerli) </br>
+2_TIMES, _2*2, NO-1  Invalid (geçersiz) </br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
