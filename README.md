@@ -1318,8 +1318,113 @@ Değişken isimleri:</br>
 __FRUIT, TRUST_NO_1, _2_TIMES (geçerli) </br>
 2_TIMES, _2*2, NO-1  Invalid (geçersiz) </br>
 
+
+FRUIT=peach</br>
+FRUIT=2apples</br>
+FRUIT=apple+pear+kiwi</br>
+
+Boşluk kullanımına dikkat edin.</br>
+$> FRUIT=apple orange plum</br>
+bash: orange: command not found.</br>
+Tırnak kullanın. </br>
+$> FRUIT="apple orange plum"</br>
+
+
+### Kullanıcı Girişi Okuma
+
+Genel biçim:
+ - read <değişken>
+
+Okuma yürütüldüğünde, kabuk;</br>
+standart girdiden bir satır okur.</br>
+ilk sözcüğü <değişken> 'de listelenen ilk değişkene atar .</br>
+ikinci sözcüğü ikinci değişkene atar. buna benzer şekilde okuma ve atama yapar.</br>
+
+Satırda listelenen değişkenlerden daha fazla kelime varsa, fazla sözcük son değişkene atanır.
+
+- read x y </br>
+
+girilen ilk satırı okur, ilk sözcüğü x değişkeninde saklar ve satırın kalanını y değişkeninde saklar.
+Örnek
+
+- $> cat read.sh </br>
+ echo &nbsp;&nbsp;–n "Lütfen adınızı ve soyadınızı girin:" </br>
+ read name1 name2</br>
+         echo "KTU bilg. müh bölümüne hoşgeldiniz, $name1 $name2"
+
+
+
+### Komut ve Aritmetik yerdeğiştirme
+
+Komuttan stdout ile değiştirme; </br>
+var=\`komut` (' ' arasında geri alıntı yapar)</br>
+var=$(komut)</br>
+
+İfade değeri ile değiştirme;</br>
+
+var = $((expresssion)) </br>
+
+Örnekler: </br>
+$> echo ‘date‘ # date komutunun çıktısını görüntüler</br>
+$> echo sistemde çalışan  \`who | wc –l` kişi var
+&nbsp;&nbsp;
+ \# bunun çıktısını görün</br>
+c = $ ((2 + 3 * 4)) # "echo $ c" 14 görüntüleniyor
+
+
+### Tamsayılı(integer) Aritmetik
+
+Bash, aritmetik ifadeleri, aritmetik yerdeğiştirme olmadan değerlendirmeyi destekler.</br>
+Sözdizimi dolar işareti olmadan $((...))'a benzer.</br>
+$> x=10</br>
+$> ((x=x*12))</br>
+$> echo $x # 120 verir. </br>
+Aritmetik ifadeler, if, while ve until komutlarında kullanılabilir.</br>
+
+Karşılaştırma operatörleri çıkış durumunu ayarlar(set'ler)</br>
+Karşılaştırma sonucu yanlış ise sıfır olmayan bir değer </br>
+sonuç doğruysa sıfır değeri</br>
+((i == 100)) eğer i, 100'e eşit ise çıkışa 1(true)dönderir, aksi halde çıkışa sıfır(false) dönderir.</br>
+if((i == 100)) ... [“$i” –eq 100] ile aynı etkiye sahip</br>
+
+### expr(ifade) komutu
+
+expr komutu, kullanıcı tanımlı değişkenler üzerinde hesaplamalar yapmak için başka formlar sağlar</br>
+
+expr val1 op val2 (boşluklarla ayrılmış)</br>
+expr $val1 op $val2 </br>
+val3 = \`expr $val1 op $val2`
+
+Örnekler; </br>
+$>expr 5 + 7 &nbsp;&nbsp; #12 döndürür </br>
+$>expr 6 – 3 – 2 # gives 1 </br>
+$>expr 3 + 4 \\* 5 # gives 23</br>
+$>expr 24 / 3 # gives 8</br>
+$>sum= \`expr 5 + 6\`</br>
+$>echo $sum  # gives 11</br>
+$>a=12</br>
+$>b=90</br>
+$>echo sum is $a + $b &nbsp;&nbsp; # sum is 12 + 90</br>
+$>echo sum is \`expr $a + $b\`&nbsp;&nbsp; # sum is 102</br>
+
+### Önceden Tanımlanmış Değişkenler
+
+Kabuk tarafından dahili olarak ayarlanan ve kullanıcıya sunulan bazı değişkenler vardır:</br>
+1$ - $9: Konumsal parametreler </br>
+$0: Komut adı</br>
+$#: Konumsal argümanların sayısı</br>
+$? : Yürütülen son komutun çıkış durumu ondalık dizgesi (0,1,2 ..) olarak verir.</br>
+$$: Eşsiz(unique) dosya isimleri oluşturmak için yararlı olabilen, çalışılan kabuğun süreç(process) numarası. </br>
+$! : Arka planda çalışan son komutun işlem kimliği (Son arka plan işleminin PID'sini tutar). </br>
+$- : Kabuğun bu çağrısına uygulanan tedarik edilmiş mevcut seçenekler.</br>
+$* : $1 'dan başlayan, kabuğun tüm argümanlarını içeren bir dize.</br>
+$@: Alıntılananlar hariç, yukarıdakiyle aynı.</br>
+
+Not: $* ve$ @ alıntı yapıldığında aynıdır ve değişkenlere genişler.</br>
+"$*", boşlukla birleştirilmiş, kabuğun tüm argümanlarını içeren tek bir kelimedir. Örneğin, '1 2' 3 , "1 2 3" olur. </br>
+"$@", kabuk tarafından alınan argümanlarla aynıdır, sonuçta ortaya çıkan sözcük listesi, kabuğa verilenlerle tamamen eşleşir. Örneğin, '1 2' 3 , "1 2" "3" olur.
+
+
 &nbsp;&nbsp;&nbsp;&nbsp;
-
-
 
 
