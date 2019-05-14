@@ -1425,6 +1425,153 @@ Not: $* ve$ @ alıntı yapıldığında aynıdır ve değişkenlere genişler.</
 "$@", kabuk tarafından alınan argümanlarla aynıdır, sonuçta ortaya çıkan sözcük listesi, kabuğa verilenlerle tamamen eşleşir. Örneğin, '1 2' 3 , "1 2" "3" olur.
 
 
-&nbsp;&nbsp;&nbsp;&nbsp;
+### Argümanları komut dosyalarına geçirme
+
+Standart UNIX komutları gibi, kabuk komut dosyaları(shell scripts)'da komut satırından değişken alabilir.</br>
+Bağımsız değişkenler, komut satırından $1 ile $9 arasındaki konumsal parametreler kullanılarak bir kabuk programın içine geçirilir.</br>
+$0  konum parametresi, komut adını veya kabuk komut dosyasını içeren yürütülebilir dosyanın adını belirtir.</br>
+Tüm konumsal parametreler $* özel parametresi kullanılarak ifade edilebilir.</br>
+
+
+Examples
+
+$ cat pass_arg. &nbsp;&nbsp;
+ \# 5 sayı kabul eden ve toplamını gösteren bir script.</br>
+aktarılan parametrelerin gösterimleri(echo ile) : $1, $2, $3, $4, $5</br>
+betiğin adının gösterimi (echo ile) : $0</br>
+aktarılan parametrelerin sayısı(echo ile) : $#</br>
+sum=\`expr $1 + $2 + $3 + $4 + $5\`</br>
+toplamları : $sum</br>
+
+
+### shift komutu
+
+Bir komut dosyasına 9'dan fazla parametre iletilirse, parametrelere erişmek için iki alternatif vardır:</br>
+
+Notasyonu ${n}</br>
+shift komutu</br>
+
+Shift komutu parametreleri bir konum sola kaydırır.</br> Shift komutunun yürütülmesinde, ilk parametrenin üzerine ikincisi yazılır, ikinci'nin üzerine üçüncü yazılır ve bunun gibi devam eder.
+
+Örnek;</br>
+
+Farklı sayıları kabul edecek ve toplamlarını bulacak bir komut dosyası yazalım. Parametrelerin sayısı değişebilir.</br>
+
+$ cat sum_arg</br>
+sum=0</br>
+while [ $# -gt 0 ]</br>
+do</br>
+ &nbsp;&nbsp;&nbsp;&nbsp;    sum=\`expr $sum + $1\`</br>
+&nbsp;&nbsp;&nbsp;&nbsp;     shift</br>
+done</br>
+echo sum is $sum</br>
+
+Örnek; Bu örneği birtane script dosyasının içine yazıp daha sonra sh script\.sh 1 2 3 4... şeklinde parametreler vererek terminalden çağırıp deneyebilirsiniz.</br>
+
+\#!/bin/bash</br>
+echo "arg1=$1 arg2=$2 arg3=$3"</br>
+shift</br>
+echo "arg1=$1 arg2=$2 arg3=$3"</br>
+shift</br>
+echo "arg1=$1 arg2=$2 arg3=$3"</br>
+shift</br>
+echo "arg1=$1 arg2=$2 arg3=$3"</br>
+
+
+### Null komutu
+
+Kabuk yerleşik bir null komutuna sahiptir
+
+formatı basit;
+- :
+
+Amaç hiçbir şey yapmamak
+
+Genellikle bir komutun, özellikle de komutlarda görünmesi gerekliliğini yerine getirmek için kullanılır. </br>
+
+if grep “^$system” ~/mail/systems > /dev/null</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;:</br>
+else</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo “$system is not a valid system”</br>
+&nbsp;&nbsp;&nbsp;&nbsp;exit 1</br>
+fi</br>
+Kabuk, bundan sonra bir komut yazmanızı gerektirir.
+Sistem geçerliyse, hiçbir şey yapılmaz
+
+
+
+### && ve || operatörleri
+
+Kabuk, bir önceki komutun başarılı veya başarısız olmasına bağlı olarak bir komutu çalıştırmanıza olanak tanıyan iki özel yapıya sahiptir.
+
+&& operatörü eğer önceki komut başarılı bir şekilde derlenirse sonraki komutu uygular.
+- komut1 && komut2
+
+komut2 yalnızca komut1 sıfır çıkış durumunu döndürürse çalıştırılır.</br>
+örnek; </br>
+[ -z $EDITOR ] && EDITOR=/bin/ed
+
+|| operatörü eğer önceki komut başarısız bir şekilde derlenirse sonraki komutu uygular.
+- komut1 || komut2
+
+komut2 yalnızca komut1 sıfır olmayan bir çıkış durumu döndürdüğünde çalıştırılır
+
+Örnekler; </br>
+[ -z $PATH ] || echo $PATH </br>
+ grep "$name" phonebook || echo \ </br>
+“Not found $name“ </br>
+ who | grep "^$name " > /dev/null || echo \ </br>
+"$name's not logged on“ </br> 
+
+(Satırın sonunda \ kullanıldığında, kabuğun satıra devam ettiğini bildirir.)
+
+&& ve || Aynı komut satırında da birleştirilebilir:
+
+who | grep "^$name " > /dev/null && \\</br>
+echo "$name is logged on" || echo "$name’s \\</br>
+not logged on"
+
+Grep başarılı olursa ilk echo gerçekleşir;başarısız olursa ikinci echo.
+
+Bu operatörler if komutları ile temsil edilebilir.
+
+if grep "$name" phonebook</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;:</br>
+else</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo "Couldn't find $name“</br>
+fi</br>
+
+
+### Koşullu İfadeler
+
+Her Unix komutu, çıkışta kabuğun sorgulayabileceği bir değer döndürür. Bu değer salt okunur kabuk değişkeni $? İçinde tutulur.
+
+0 (sıfır) değeri başarıyı gösterir; 0 (sıfır) dışında herhangi bir şey başarısızlık anlamına gelir.
+
+Tamsayı kullanıyorsanız: ((koşul))</br>
+Dizeler kullanılıyorsa: [[koşul]]</br>
+Çıkış durumları duruma bağlı olarak sıfır veya sıfır değildir </br>
+Örnekler:</br>
+(( a == 10 ))</br>
+(( b >= 3 ))</br>
+[[ $1 = -n ]]</br>
+[[ ($v != fun) && ( $v != games) ]]</br>
+(( Z > 23 )) && echo Yes</br>
+
+Dosya varlığı, dosya izinleri, sahiplik, dosya türü vb. İçin özel koşullar.
+
+- [[ -e $file ]] –File exists?  (dosya mevcut mu?)
+- [[ -f $file ]] –Regular file? (dosya normal mi?)
+- [[ -d $file ]] –Directory? (dizin mi?)
+- [[ -L $file ]] –Symbolic link? (sembolik link?)
+- [[ -r $file ]] –File has read permission? (dosya okuma izni varmı)
+- [[ -w $file ]] –File has write permission? (dosya okuma yazma varmı)
+- [[ -x $file ]] –File has execute permission? (dosya çalıştırma izni varmı)
+- [[ -p $file]] –File is a pipe?
+
+ pipe?
+&nbsp;&nbsp;
 
 
