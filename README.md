@@ -1571,7 +1571,217 @@ Dosya varlığı, dosya izinleri, sahiplik, dosya türü vb. İçin özel koşul
 - [[ -x $file ]] –File has execute permission? (dosya çalıştırma izni varmı)
 - [[ -p $file]] –File is a pipe?
 
- pipe?
-&nbsp;&nbsp;
+ 
+ ### İf deyimi
+
+İf ifadesi verilen komutun çıkış durumunu kullanır ve şartlı olarak aşağıdaki ifadeleri çalıştırır.
+
+Genel sözdizimi:</br>
+if koşul</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;komutlar (koşul doğruysa)</br>
+else</br>
+&nbsp;&nbsp;&nbsp;&nbsp;komutlar (koşul yanlışsa)</br>
+fi</br>
+
+İç içe if ifadesi:</br>
+if (-----)</br>
+then ...</br>
+else if ...</br>
+&nbsp;&nbsp;&nbsp;&nbsp;...</br>
+&nbsp;&nbsp;fi</br>
+fi</br>
+
+elif ifadesi, else if ifadesi için kısa yol olarak kullanılabilir.
+
+örnek: </br>
+if [[ -r $fname ]]</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo “$fname is readable”</br>
+elif [[ -w $fname && -x $fname ]]</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo “$fname is writeable and
+executable”</br>
+fi
+
+### test komutu
+
+Unix sistemi, önceki komutun çıkış durumunu araştıran ve sonucu başarı ya da başarısızlık biçiminde çeviren, yani sonucu 0 ya da 1 olan test komutu sağlar.
+
+Test komutu herhangi bir çıktı üretmez, ancak testin başarısız olup olmadığını kontrol etmek için çıkış durumu if ifadesine geçirilebiliriz.
+
+Herhangi bir komutun çıkış durumunu nasıl öğrenebilirim?
+
+Tüm komutlar çıkış durumunu, echo komutu kullanılarak görüntülenebilen önceden tanımlanmış bir Shell Değişkenine ‘?’ Döndürür. Örneğin;</br>
+echo$?</br>
+Bunun çıktısı 0 (Sıfır) ise önceki komut başarılı olmuş demektir veya çıktı 1 (Bir) ise önceki komutun başarısız olduğu anlamına gelir.
+
+Test komutunun aşağıda açıklanan dosyalar, sayısal değerler ve diziler üzerinde çalışması için belirli operatörleri vardır:
+Test komutuyla kullanılan Sayısal 
+
+Değişkenlerdeki İşleçler:
+- -eq : equal to(eşittir)
+- -ne : not equals to(eşit değildir)
+- -gt : grater than (dan büyüktür)
+- -lt : less than (dan küçüktür)
+- -ge : greater than or equal to(büyük veya eşittir)
+- -le : less than or equal to(küçük veya eşittir.)
+
+
+Test komutuyla kullanılan String Değişkenleri işleçleri:
+- =  : equality of strings(dizgelerin eşitliği)
+- !=  : not equal (eşit değil)
+- -z : zero length string (sıfır karakter içeren dize yani null dize).
+- -n : String length is non zero.(dize uzunluğu sıfır değil)
+
+Örnekler: </br>
+$> a=12; b=23 </br>
+$> test $a –eq $b </br>
+$> echo $? &nbsp;&nbsp;&nbsp;&nbsp; # 1verir </br> 
+$> name=”Ahmet” </br>
+$> test –z $name &nbsp;&nbsp;&nbsp;&nbsp; #return 1 </br> 
+$> test –n $name &nbsp;&nbsp;&nbsp;&nbsp; #return 0</br>
+$> test –z “$address” </br>
+$> test $name = “Ali” </br>
+
+Test komutuyla kullanılan dosyalardaki operatörler:</br>
+- -f: dosya var.
+- -s: dosya var ve dosya boyutu sıfır değil.
+- -d: dizin var.
+- -r: dosya var ve okuma iznine sahip.
+- -w: dosya mevcut ve yazma iznine sahip.
+- -x: dosya var ve yürütme iznine sahip.
+
+Örnekler: </br>
+$> test –f “mydoc.doc”</br>
+\# mydoc.doc dosyasını kontrol eder, varsa 0, yoksa 1 döndürür.</br>
+$> test –r “mydoc.doc”</br>
+\# mydoc.doc için okuma izni olup olmadığını denetler</br>
+$> test –d “$HOME”</br>
+\# kullanıcıların ana dizininin varlığını kontrol eder..</br>
+
+
+### Test komutuyla kullanılan Mantıksal Operatörler:
+Birden fazla koşulu birleştirmek mantıksal AND, OR ve NOT işleçleriyle yapılır.
+- -a: mantıksal AND(VE)
+- -o: mantıksal OR(VEYA)
+- ! : mantıksal NOT(DEĞİL)
+
+$> test –r “mydoc.doc” –a –w “mydoc.doc”</br>
+\# mydoc.doc dosyasının hem okuma hem de yazma iznini kontrol eder ve sonucA bağlı olarak 0 veya 1 döndürür.
+
+if who | grep -s hakan > /dev/null</br>
+then</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo hakan CE sunucusuna giris yapti </br>
+else</br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo hakan CE sunucusunda mevcut degis</br>
+fi
+
+Bu script, şu anda sisteme giriş yapmış olan kişileri listeler ve çıktıyı grep üzerinden pipe ile yönlendirir.
+
+
+### durum(case) açıklamaları
+
+Sözdizimi:</br>
+  case expression in</br>
+&nbsp;&nbsp;pattern1)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;commands ;;</br>
+&nbsp;&nbsp;pattern2)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;commands ;;</br>
+...
+*)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;commands ;;</br>
+esac</br>
+
+örnekler: </br>
+örnek1:  
+case $1 in </br>
+-a)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;a seçeneğiyle ilgili komutlar ;;</br>
+-b)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;b seçeneğiyle ilgili komutlar ;;</br>
+*)</br>
+&nbsp;&nbsp;&nbsp;&nbsp;diğer tüm seçenekler ;;</br>
+esac</br>
+
+örnek2:  
+clear</br>
+echo "1. Date and time"</br>
+echo  
+echo "2. Directory listing"    
+echo  
+echo "3. Users information "  
+echo  
+echo "4. Current Directory"  
+echo  
+echo –n "Enter choice (1,2,3 or 4):"  
+
+örnek3:  
+
+read choice  
+case $choice in  
+&nbsp;&nbsp;&nbsp;&nbsp;1\) date;;  
+&nbsp;&nbsp;&nbsp;&nbsp;2) s -l;;  
+&nbsp;&nbsp;&nbsp;&nbsp;3) who ;;  
+&nbsp;&nbsp;&nbsp;&nbsp;4) pwd ;;  
+&nbsp;&nbsp;&nbsp;&nbsp;*) echo wrong choice;;  
+esac  
+
+bu komutları birtane script dosyasının içine yazıp bu dosyayı terminalden çalıştırdığımız zaman bizden birtane argüman ister bu argümanı okuduktan sonra 1,2,3,4 veya diğer olacak şekilde ayırarak farklı komutları çalıştırır.
+
+### for döngüsü
+
+Sözdizimi:  
+for var [in list ]  
+do  
+&nbsp;&nbsp;&nbsp;&nbsp; commands  
+done  
+
+Tek bir satırdaki komutlar noktalı virgülle (;) ayrılır.  
+Liste belirtilmezse, $@ kabul edilir.  
+Aksi takdirde ${list [*]}   , Burada liste bir dizi değişkenidir.
+
+örnekler:  
+
+for colors in Red Blue Green Yellow Orange Black Gray  
+&nbsp;&nbsp;do  
+&nbsp;&nbsp;&nbsp;&nbsp;echo $colors  
+&nbsp;&nbsp;done  
+echo
+
+Bu örnek verilen tüm renkleri terminale yazdırır.
+
+### While döngüsü
+
+Sözdizimi:  
+while command-list1  
+do  
+&nbsp;&nbsp; command-list2  
+done  
+
+command-list1'deki son komutun çıkış durumu 0 (sıfır) ise, command-list2'deki komutlar yürütülür.  
+
+Anahtar kelimeler break, contiune ve return , C / C ++ ile aynı özelliklere sahiptir.
+
+break [num] veya contiune [num] # num döngü sayısıdır  
+
+
+### Until döngüsü
+
+Sözdizimi:  
+Until command-list1  
+do  
+&nbsp;&nbsp; command-list2  
+done  
+
+Döngü, command-list1'in çıkış durumu sıfır olmadıkça gerçekleştirilir.
+
+While/until komutunun çıkış durumu, command-list2'de yürütülen son komutun çıkış durumudur. Eğer böyle bir komut listesi çalıştırılmazsa, while/until  çıkış 0 durumundadır.
+
+örnekler:  
+
+### eval komutu 
+
+&nbsp;&nbsp;&nbsp;&nbsp;
 
 
