@@ -1976,12 +1976,215 @@ echo -e "\033[ escape-code your-message "
 
 Komut dosyasını kabuk programına bir argüman olarak verin (ör. Bash my_script).  
 Veya komut dosyasında hangi kabuğun kullanılacağını belirtin.  
-- script'in ilk satırı #!/Bin/ bash
+- script'in ilk satırı #!/bin/ bash
 - Komut dosyasını chmod kullanarak yürütülebilir duruma getirin.
 - PATH'in geçerli dizini içerdiğinden emin olun.
 - Doğrudan komut satırından çalıştırın 
 
 Derleme gerekmez!
+
+
+
+## Bölüm-9 Yazılım Geliştirme: g++ ve make
+
+### Yazılım geliştirme süreçi
+
+- Kaynak dosyalarının oluşturulması.(.c, .h, .cpp)
+- Derleme (*.c , *.o) ve bağlama(linking)
+- Programları çalıştırma ve test etme.  
+
+
+Geliştirme araçları:  
+Kaynak dosyalarının oluşturulması.(.c, .h, .cpp)  
+&nbsp;&nbsp;&nbsp;&nbsp; Text editörleri; vi ,emacs  
+&nbsp;&nbsp;&nbsp;&nbsp; versiyon kontrol sistemleri; rcs, cvs  
+Derleme (*.o) and bağlama.  
+&nbsp;&nbsp;&nbsp;&nbsp;Derleyiciler; gcc, g++    
+&nbsp;&nbsp;&nbsp;&nbsp;Otomatik yapı(building) araçları; make  
+Çalıştırma ve test etme(xdb,gdb)  
+
+### Derleme şüreci
+
+(foto gelecek)
+
+### Temel g++ Örnekleri
+
+- g++ hello.cpp  
+&nbsp;&nbsp;&nbsp;&nbsp; hello.cpp derlenir  
+&nbsp;&nbsp;&nbsp;&nbsp; çalıştırılabilir a.out dosyası üretir  
+- g++ -o hello hello.cpp  
+&nbsp;&nbsp;&nbsp;&nbsp; hello.cpp derlenir  
+&nbsp;&nbsp;&nbsp;&nbsp; çalıştırılabilir hello dosyası üretir.  
+- g++ -o hello hello.cpp util.cpp  
+&nbsp;&nbsp;&nbsp;&nbsp; hello.cpp ve util.cpp derlenir  
+&nbsp;&nbsp;&nbsp;&nbsp; çalıştırılabilir hello dosyası üretir.  
+
+Ayrı ayrı derleme:  Herhangi bir kaynak dosyadan, daha sonra çalıştırılabilir yapmak için bağlanacak bir nesne dosyası oluşturabilirsiniz.  
+- g++ -c hello.cpp
+- g++ -c util.cpp
+- g++ -o hello hello.o util.o  
+
+
+### g++ seçenekleri
+
+- -c  
+&nbsp;&nbsp;&nbsp;&nbsp;kaynak dosyalarını derler ama bağlantı(link) yapmak  
+&nbsp;&nbsp;&nbsp;&nbsp;çıktı(output) kaynak dosyaya karşılık gelen bir nesne dosyasıdır.  
+- o \<dosya\>  
+&nbsp;&nbsp;&nbsp;&nbsp;çıktıyı \<dosya\> adlı bir dosyaya koyar.  
+- g  
+&nbsp;&nbsp;&nbsp;&nbsp;çıktıdaki hata ayıklama(debugging) sembollerini dahil et.  
+&nbsp;&nbsp;&nbsp;&nbsp;daha sonra hata ayıklama programı(gdb) tarafından kullanılacak.  
+- Wall  
+&nbsp;&nbsp;&nbsp;&nbsp;Tüm uyarıları göster(program hala derlenebilir).  
+- -D\<macro\>  
+&nbsp;&nbsp;&nbsp;&nbsp;macro '1' string'i ile tanımlanır  
+- -l\<name\>  
+&nbsp;&nbsp;&nbsp;&nbsp;lib\<name\>.a adlı kütüphaneyi dahil eder.
+- -I\<path\>  
+&nbsp;&nbsp;&nbsp;&nbsp;verilen dizinde bulunan dosyalar dahil etmek(include) için bakar.  
+- L\<path\>  
+&nbsp;&nbsp;&nbsp;&nbsp;verilen dizinden bulanan kütüphanelere bakar.  
+
+g++'nın kütüphaneler ve dahil edilen dosyalar için varsayılan dizinleri vardır.
+
+
+### g++ 'da tanımlar
+
+Genellikle programlar aşağıdakilere dayanan koşullu parçalar içerir:  
+\#ifdef DEBUG  
+printf(“value of var is %d”, var);  
+\#endif  
+
+Önişlemci tanımlarını komut satırından ayarlayabilirsiniz:  
+g++ -DDEBUG -o prog prog.c  
+
+
+(genişletilecek...)  
+
+### Derlemede'de make kullanımı
+
+Çok sayıda dosya içeren orta ve büyük çaplı yazılım projelerini derlemek şu sebeblerden zor olur:  
+- Her seferinde tüm dosyaları doğru bir şekilde derlemek için komutların yazılması
+- Hangi dosyaların değiştirildiğinin takip edilmesi
+- Dosyalar arasındaki bağlılıkların takip edilmesi  
+
+make, bu işlemleri otomatikleştirir.  
+
+### make'in temek işlemleri
+
+Programı oluşturmak için, kurallar içeren [Mm]akefile adlı bir dosyayı okur.  
+- Eğer program başka bir dosyaya bağlıysa, ozaman bu dosya oluşturulur.
+- Tüm bağımlılıklar bağımlılıklar zincirinde geri doğru çalışacak şekilde inşa(build)edilir.
+- Programlar yalnızca bağlı(depend) oldukları dosyalardan daha eski ise inşa(built) edilebilir.
+
+### Temel Makefile Örnekleri
+
+\# mydb için Makefile  
+mydb: mydb.o user.o database.o  
+&nbsp;&nbsp;&nbsp;&nbsp;g++ -o mydb mydb.o user.o database.o  
+mydb.o : mydb.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;g++ -c mydb.cpp  
+user.o : user.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;g++ -c user.cpp  
+database.o : database.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;g++ -c database.cpp  
+
+(foto)  
+
+
+### Bir Makefile'ın parçaları
+
+Bağımlılık satırları:  
+- Hedef(target) adlarını ve bağımlılıklarını içerir (isteğe bağlı)
+- bağımlılıklar(dependencies)  
+&nbsp;&nbsp;&nbsp;&nbsp;Dosyalar  
+&nbsp;&nbsp;&nbsp;&nbsp;hedefler
+Komutlar:  
+- bağımlılık satırın altında olmalı
+- her zaman bir çıkıntıyla(tab) başla
+- bağımlılığı karşılamak için komutlar
+
+(foto)
+
+### Makrolar(macros) ve özel değişkenler
+
+Makefile'daki metni temsil etmek için makrolar kullanılır.  
+- yazarken kaydeder.
+- Makefile'ın kolayca değiştirilmesine izin verir.
+- atamalar(assignment)  
+&nbsp;&nbsp;&nbsp;&nbsp;Kullanımı: ${MACRONAME}  
+
+Komutlarda özel değişkenler kullanılır:
+- $@ hedefi temsil ediyor.
+- $? bağımlılıkları temsil ediyor.  
+
+### örneği basitleştirme
+
+OBJS = mydb.o user.o database.o  
+CC = /usr/bin/g++  
+
+mydb: ${OBJS}  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} -o $@ $?  
+mydb.o: mydb.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} -c $?  
+user.o: user.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} -c $?  
+database.o: database.cpp mydb.h  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} -c $?  
+
+
+### Make'i cağırmak (invoking make)
+
+- açıklama dosyası olduğundan emin olun  
+&nbsp;&nbsp;&nbsp;&nbsp;makefile veya Makefile olarak adlandırılır  
+&nbsp;&nbsp;&nbsp;&nbsp;kaynak dosyalarının bulunduğu dizinde  
+- make  
+&nbsp;&nbsp;&nbsp;&nbsp;dosyada ilk hedefi oluşturur
+- make hedef(leri)  
+&nbsp;&nbsp;&nbsp;&nbsp; hedef(leri) oluşturur(builds).
+ - diğer seçenekler:  
+&nbsp;&nbsp;&nbsp;&nbsp; \-n: komutları çalıştırma, sadece listele  
+&nbsp;&nbsp;&nbsp;&nbsp; \-f \<file\>: [Mm]akefile yerine \<file\> 'ı kullan.
+
+
+### Diğer Makefile Notları ve Son ek(suffix) kuralları
+
+Yorumlar ‘#’ ile başlar  
+Bir satırın başına veya yorum olmayan bir satırın sonuna konulabilir.  
+Çok uzun olan satırlar, önceki satırın sonuna line \\ koyarak bir sonraki satırda devam edebilir.  
+
+</br>
+Son Ek Kuralları:  
+her .o dosyasını kaynak dosyadan nasıl oluşturacağını söylemek hala sıkıcı.  
+Sonek kuralları bu tür durumları genelleştirmek için kullanılabilir. 
+
+- Varsayılan bir sonek kuralı, komut tarafından çalıştırarak kaynak dosyalarını, .o dosyalarına dönüştürür:  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} ${CFLAGS} -c $<  
+- $< , önkoşul anlamına gelir (file.cpp)
+
+### En Basit Makefile Örneği
+
+OBJS = mydb.cpp user.cpp database.cpp  
+CC = /usr/bin/g++  
+
+mydb: ${OBJS}  
+&nbsp;&nbsp;&nbsp;&nbsp;${CC} -o $@ $?  
+
+### Diğer Faydalı Makefile İpuçları
+
+Ara dosyaları(intermediate) kaldırmanın bir yolunu dahil edin.
+- clean:  
+&nbsp;&nbsp;&nbsp;&nbsp;rm –f mydb  
+&nbsp;&nbsp;&nbsp;&nbsp;rm -f * .o  
+
+çoklu programlar oluşturmak için bir hedef dahil edin.
+- all: mydb mycalendar myhomework  
+
+
+## Bölüm-10 Hata ayıklama (Debugging)
+
+(pek yakında...) 
+
+## Bölüm-11 Süreç Yönetimi (Process Management)
 &nbsp;&nbsp;&nbsp;&nbsp;
-
-
