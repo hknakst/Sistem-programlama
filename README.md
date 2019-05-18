@@ -937,7 +937,7 @@ Kabuk betiği(Shell script), kabuk yorumlaması için mantık içeren bir metin 
 http://www.faqs.org/faqs/unix-faq/shell/shell-differences/ </br>
 
 ### Kabuk Özellikleri. 
-(foto)
+(foto) burası güncellenecek :\)
 
 ### Bourne Again SHell (bash)
 
@@ -1081,10 +1081,10 @@ Oturum kapatıldıktan sonra komut dosyası çalıştırıldı </br>
 umask 022 (0666 & ~022 = 0644 = rw-r--r--) </br>
 \# varsa, .bashrc komutunu ekleyin </br>
 if [ -f ~/.bashrc ]; then </br>
-&nbsp;&nbsp; &nbsp;&nbsp;. ~/.bashrc </br>
+&nbsp;&nbsp; &nbsp;&nbsp;. \~/.bashrc </br>
 fi </br>
 \# değişkenleri ayarla </br> 
-export CVSROOT=~/.cvsroot </br>
+export CVSROOT=\~/.cvsroot </br>
 export EDITOR=/bin/vi </br>
 export PAGER=/usr/bin/less </br>
 
@@ -1109,7 +1109,7 @@ ENV ayarlanmışsa: </br>
    &nbsp;&nbsp;EXPORT ENV (for bash) </br>
 
 
-## Temel Kabuk Betiği (basic shell script)
+## Bölüm-7 Temel Kabuk Betiği (basic shell script)
 
 Bir kabuk betiği nedir?
 
@@ -1781,7 +1781,207 @@ While/until komutunun çıkış durumu, command-list2'de yürütülen son komutu
 örnekler:  
 
 ### eval komutu 
+...
+(Bölüm 7 henüz bitmedi devam edicek :))
 
+
+
+## Bölüm-8 Gelişmiş Kabuk Betiği(Advanced Shell Scripting )
+
+### Fonksiyon oluşturma ve kullanma
+
+Bir kabuk fonksiyonunun tanımı aşağıdaki gibidir:  
+isim(){list ;}  
+
+Geçerli ve geçersiz fonksiyon tanımları:
+lsl(){ ls -l ; } &nbsp;&nbsp;&nbsp;&nbsp;# geçerli  
+lsl { ls -l ; } &nbsp;&nbsp;&nbsp;&nbsp;# geçersiz  
+
+sh için takma ad tanımlama:  
+$> cat mycd  
+cd () { chdir ${1:-$HOME} ; PS1="\`pwd\`$ " ; export PS1 ; }  
+$> source mycd  
+
+
+Örnekler:
+
+yazdir(){  
+&nbsp;&nbsp;&nbsp;&nbsp;for i in {1..13}  
+&nbsp;&nbsp;&nbsp;&nbsp;	do  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;		echo "hakan"  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;		echo "$i"  
+&nbsp;&nbsp;&nbsp;&nbsp;	done  
+}  
+
+Bu fonksiyon 13 kere hakan ve sırasıyla sayıları yazar ama bu fonksiyonu terminalde koşabilmek için dosyayı source etmemiz gerekir.Bunuda şu şekilde yaparız.  
+
+- source dosya_adı
+
+Bu komuttan sonra dosyamızdaki fonksiyonu ismiyle çağırabiliriz(sadece mevcut terminalde):  
+yazdir    
+hakan  
+1  
+hakan  
+2 ...  
+
+
+Her dizinin tek bir satırda listelenmesiyle, PATH'nin geçerli değerini listelemek:  
+
+lspath() {  
+&nbsp;&nbsp;&nbsp;&nbsp;OLDIFS="$IFS"  
+&nbsp;&nbsp;&nbsp;&nbsp;IFS=:  
+&nbsp;&nbsp;&nbsp;&nbsp;for DIR in $PATH ; do echo $DIR ; done  
+&nbsp;&nbsp;&nbsp;&nbsp;IFS="$OLDIFS"  
+}  
+$> lspath | grep "/usr/dt/bin"  
+
+
+</br>
+Dizinini uygun hale getirmek: 
+
+setPath() {  
+&nbsp;&nbsp;&nbsp;&nbsp;PATH=${PATH:="/sbin:/bin"};  
+&nbsp;&nbsp;&nbsp;&nbsp;for _DIR in "$@"  
+do  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if [ -d "$_DIR" ] ; then  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PATH="$PATH":"$_DIR" ; fi  
+&nbsp;&nbsp;&nbsp;&nbsp;done  
+&nbsp;&nbsp;&nbsp;&nbsp;export PATH  
+&nbsp;&nbsp;&nbsp;&nbsp;unset _DIR  
+}
+
+Örnek bir çağrı:  
+$> setPath /sbin /usr/sbin /bin /usr/bin /usr/ccs/bin  
+Her argümanının bir dizin olup olmadığını kontrol eder ve bir dizin varsa PATH'ye eklenir.  
+
+
+### Fonsiyona parametre verme
+
+Bir parametre script'e iletildiği gibi bir fonsiyona da iletilebilir.  
+fonksyion tanımlamak için sözdizimi:  
+fonksyion fonksyion_adı()
+{  
+deyim1  
+deyim2  
+deyimN  
+}  
+Bu işlev komut satırından veya kabuk betiğinin içinde aşağıdaki şekilde çağrılır:
+fonsiyon-adı arg1 arg2 arg3 argN  
+
+örnek:  
+
+$ vi pass  
+function demo()  
+{  
+echo "All Arguments to function demo(): $*"  
+echo "First argument $1"  
+echo "Second argument $2"  
+echo "Third argument $3"  
+return  
+}  
+\# fonksyionu cağrıyoruz.  
+demo -f foo bar  
+
+çıktısı:  
+All Arguments to function demo(): -f foo bar  
+First argument -f  
+Second argument foo  
+Third argument bar  
+
+### Değer döndürme(return)
+
+Örnek tanım:  
+function topla {  
+(( toplam=$1+$2 ))  
+return $toplam  
+}  
+
+fonksiyonu çağırmak:  
+topla 2 3  
+echo $?  
+
+$? son işlev çağrısından veya komut tarafından döndürülen değerdir.
+
+
+### Fonksiyonlar arasında veri paylaşımı
+
+C kabuğu(shell),csh, UNIX dosya sisteminde hızlı hareket etmek için üç yardımcı komut sağlar:  
+- popd
+- pushd
+- dirs
+
+Bu komutlar, dahili olarak bir dizin yığınını korur ve kullanıcının yığından dizinleri ekleyip, çıkarmasına olanak tanır ve yığının içeriğini listeler.
+
+
+dirs uygulaması:  
+</br>
+dirs() {  
+&nbsp;&nbsp;\# IFS'yi kaydedin, ardından şuna ayarlayın:   
+&nbsp;&nbsp;\# _DIR_STACK öğelerine ayrı ayrı erişmek için.  
+&nbsp;&nbsp; OLDIFS="$IFS"  
+&nbsp;&nbsp;IFS=:  
+&nbsp;&nbsp;# her dizini ve ardından bir boşluk yazdır  
+&nbsp;&nbsp;for i in $_DIR_STACK  
+&nbsp;&nbsp;do  
+&nbsp;&nbsp;&nbsp;&nbsp;echo "$i \c“  
+&nbsp;&nbsp;done  
+&nbsp;&nbsp;# tüm girişlerden sonra yeni bir satır ekle  
+&nbsp;&nbsp; \# _DIR_STACK yazdırıldı
+&nbsp;&nbsp;echo  
+&nbsp;&nbsp; \# IFS'yi geri yükle 
+&nbsp;&nbsp;IFS="$OLDIFS"  
+}  
+
+pushd uygulaması:  
+...(gelecek)  
+popd uygulaması:  
+...(gelecek)  
+
+### echo komutu
+
+metin veya değişken değerlerini gösterir.  
+echo [options] [string, değişkenler ...]
+
+Seçenekler:  
+- -n Sondaki yeni satırı çıkışa vermez.
+- -e Aşağıdaki kaçış karakterleri yorumlar.
+- \\c Sondaki yeni satırı bastırır.
+- \\a Bir uyarı (zil).
+- \\b geri al.
+- \\n yeni satır.
+- \\r satır başı.
+- \\t yatay sekme(tab).
+- \\ters eğik çizgi.
+
+### renkli metin gösterme
+
+echo ile birlikte kullanılan bazı kontrol karakterleri vardır.  
+Bu kod, mesajı Mavi renkte yazdırır:  
+$> echo "\033[34m Hello Colorful World!"  
+Hello Colorful World!  
+
+Bu ANSI kaçış dizisini kullanır (\033[34m).  
+\033, kaçış karakteri, biraz harekete geçiyor  
+[34m kaçış kodu ön plan rengini Mavi olarak ayarlar  
+&nbsp;&nbsp;&nbsp;&nbsp;[ CSI'nin başlangıcıdır (Komut Dizisi Giriş).  
+&nbsp;&nbsp;&nbsp;&nbsp;34, parametredir.  
+&nbsp;&nbsp;&nbsp;&nbsp;m harfdir (eylemi belirtir).  
+
+Genel sözdizimi:  
+echo -e "\033[ escape-code your-message "
+</br>
+(Bu başlık vakit bulursam genişletilebilir...)
+
+### Komut dosyası yürütme(script execution)
+
+Komut dosyasını kabuk programına bir argüman olarak verin (ör. Bash my_script).  
+Veya komut dosyasında hangi kabuğun kullanılacağını belirtin.  
+- script'in ilk satırı #!/Bin/ bash
+- Komut dosyasını chmod kullanarak yürütülebilir duruma getirin.
+- PATH'in geçerli dizini içerdiğinden emin olun.
+- Doğrudan komut satırından çalıştırın 
+
+Derleme gerekmez!
 &nbsp;&nbsp;&nbsp;&nbsp;
 
 
