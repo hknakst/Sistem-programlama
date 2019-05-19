@@ -2188,7 +2188,219 @@ Ara dosyaları(intermediate) kaldırmanın bir yolunu dahil edin.
 
 ## Bölüm-11 Dosya yönetimi (File Management)
 
-(pek yakında...) 
+(devamı pek yakında...)
+
+### Sistem Çağrıları
+
+Programlar, kütüphaneler üzerinden sistem çağrıları yapar. 
+- libc, sistem çağrıları için C arayüzü sağlar.
+- doğrudan Unix çekirdeğine bir altprogram çağrısı.  
+
+4 ana sistem çağrısı kategorisi:
+- Dosya yönetimi.
+- Süreç yönetimi.
+- İletişim.
+- Hata ve sinyal işleme.
+
+
+### Program yürütmek
+
+- Özel bir başlatma rutini (crt0) her zaman programınıza bağlanır.
+- Bu rutin argümanları okur ve main'i çağırır.
+- Libc kütüphanesi programınıza otomatik olarak bağlanır; bu şekilde birçok C işlevine (printf, open, vb.) erişiminiz vardır.
+- Programınız, çıkışta dosya tanımlayıcılarını kapatan ve diğer kaynakları temizleyen özel işlevler de çağırır.
+
+### C'ye karşı C++
+
+- string veri türü yok  
+Bunun yerine karakter dizileri kullanın
+Karakter dizilerini “atamak” için strcpy (), strncpy (), strcmp (), strncmp () kullanın.
+- Gömülü beyan yok(embedded declarations)  
+Tüm değişkenlerin bir kod bloğunun başlangıcında bildirilmesi gerekir
+- Çok farklı Dosya ve Standart G / Ç fonksiyonları  
+printf() cout'a karşı  
+scanf() ve fgets() cin'e karşı  
+
+
+### Arabelleksiz(unbeffered) G/Ç vs. Standart G/Ç
+
+Arabelleksiz giriş/çıkış:
+- sistem çağrılarını kullanarak g/ç gerçekleştirebilir.(open,read,write,close,lseek)
+- arabellek boyutunu ve bayt'ların numarasını belirtmeniz gerekir.
+- Biçimlendirme seçeneği yok.
+- Bu fonksiyonlar dosya tanımlayıcılarını argüman olarak kullanır.
+- Sabitler unistd.h'da tanımlanır(STDIN_FILENO, gibi).  
+
+Standart giriş/çıkış:  
+- Bir C kütüphanesi fonksiyon dizisi(printf,scanf,getc)
+- Arabellekleme(bufferin) otomatik.
+- Birçok biçimlendirme seçeneği
+- stdio fonksiyonları ilkel sistem çağrılarından oluşur.
+- Sabitler stdio.h'da tanımlanır(stdin, gibi).
+
+### Temel Dosya G/Ç
+
+- Unix'de herşeyin bir dosya olduğunu hatırlayın ve unutmayın.
+- çekirdek(kernel), her süreç için açık dosyaların bir listesini tutar.
+- Dosyalar okuma,yazma için açılabilir.
+- G/Ç sistem çağrılarını kullanmak için \<stdio.h\> dahil edilmelidir.(include)  
+&nbsp;&nbsp;&nbsp;&nbsp; Not: Unix çekirdeği ile etkileşime girmek için kullanılan sistem çağrılarının bazıları diğer işletim sistemlerinde de mevcuttur. Bununla birlikte, bunlar çok farklı şekilde uygulanabilir (muhtemelen). Bazıları hiç mevcut değil.
+
+
+- Çoğu Unix G/Ç, 5 sistem çağrısı ile yapılabilir.  
+&nbsp;&nbsp;&nbsp;&nbsp; open, read, write, close, lseek
+- Her dosya bir dosya tanımlayıcısı tarafından referans edilir(bir tam sayı)).
+- Üç dosya otomatik olarak açılır:  
+&nbsp;&nbsp;&nbsp;&nbsp; FD 0: standart giriş  
+&nbsp;&nbsp;&nbsp;&nbsp; FD 1: standart çıkış  
+&nbsp;&nbsp;&nbsp;&nbsp; FD 2: standart hata  
+- Yeni bir dosya açıldığı zaman, en küçük FD'ye atanır.
+- man -s 2 <systemcall> (daha fazla bilgi almak için)
+
+### open()
+
+int open(char *path, int flags, mode_t mode);  
+path: absolute(mutlak) veya relative(göreceli) path  
+flags(bayraklar):  
+- O_RDONLY - okumak için aç
+- O_WRONLY - yazmak için aç
+- O_RDWR - okuma ve yazma için aç
+- O_CREAT - mevcut değilse dosyayı oluştur
+- O_TRUNC - eğer varsa dosyayı keser (üzerine yazar).
+- O_APPEND - sadece dosyanın sonuna yaz
+
+modu: eğer O_CREAT kullanıyorsanız, izinleri açıkca belirtin  
+Yeni atanan dosya tanımlayıcısını döndürür.  
+
+- Oluşturulma izinleri:  
+&nbsp;&nbsp;&nbsp;&nbsp;777 vs 0777 vs 0x777  
+&nbsp;&nbsp;&nbsp;&nbsp; izinler:  
+  - read(r--,4)
+  - write(-w-,2)
+  - execute(--x,1)  
+  
+  kim(who):  
+  
+  - user(0700)
+  - group(0070)
+  - others(0007)
+
+
+- fd = open(”name”, O_RDWR|O_CREAT, 0700);
+- fd dönen değer:  
+&nbsp;&nbsp;&nbsp;&nbsp;fd >= 0 – açma başarılır  
+&nbsp;&nbsp;&nbsp;&nbsp;fd < 0 – açma başarısız  
+
+
+### read() ve write()
+
+ssize_t read(int fd, void *buf, size_t nbytes);  
+ssize_t write(int fd, void *buf, size_t nbytes);  
+
+- fd, open tarafından döndürülen değerdir.
+- buf genellikle bir veri dizisidir
+- nbayt buf boyutu(okunan) veya yazılacak veri boyutudur
+- döndürülen değer:  
+&nbsp;&nbsp;&nbsp;&nbsp;> 0 okunan veya yazılan bayt sayısıdır.  
+&nbsp;&nbsp;&nbsp;&nbsp;<= okumak için nbayt  
+&nbsp;&nbsp;&nbsp;&nbsp;0 EOF(dosya sonunun habercisi)  
+&nbsp;&nbsp;&nbsp;&nbsp;< 0 error  
+
+### read() örneği
+
+bytes = read(fd, buffer, count);  
+Fd ile ilişkili dosyadan okur.  
+okunan bayt sayısını veya hata mesajı yani -1 değerini döndürür  
+
+int fd=open("someFile", O_RDONLY);  
+char buffer[4];  
+int bytes = read(fd, buffer, 4);  
+
+
+### write() örneği
+
+bytes = write(fd, buffer, count);
+Fd ile ilişkili dosyaya yazar.  
+yazılan bayt sayısını veya hata mesajı yani -1 değerini döndürür
+
+int fd=open("someFile", O_WRONLY);  
+char buffer[4];  
+int bytes = write(fd, buffer, 4);  
+
+
+### stdin'i stdout'a kopyalamak
+
+\#define BUFFSIZE 8192  
+// bu nasıl seçilir  
+int main(void) {
+
+int n;  
+char buf[BUFFSIZE];  
+while ((n=read(STDIN_FILENO, buf, BUFFSIZE)) > 0)  
+&nbsp;&nbsp;if (write(STDOUT_FILENO, buf, n) != n)  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("write error");  
+&nbsp;&nbsp;if (n < 0)  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("read error");  
+}
+
+
+
+### close()
+
+int close(int fd);  
+
+- fd ile ilişkili dosya kapatılır.
+- başarı durumda 0, hata durumunda -1 döndürür.
+- close(1);  
+&nbsp;&nbsp;&nbsp;&nbsp; standart çıkışı kapatır.
+
+
+
+### lseek()
+
+off_t lseek(int fd, off_t offset, int whence);  
+
+- Dosya işaretcisini(pointer) yeni konumuna taşır.
+- fd, open tarafından döndürülen sayıdır.
+- off_t , long veya int... değil, dörtlü olabilir.
+- ofsett , bayt sayısıdır.
+- nereden(whence):  
+&nbsp;&nbsp;&nbsp;&nbsp;SEEK_SET – dosyanın başlangıcından itibaren ofsett(bayt sayısı kadar)  
+&nbsp;&nbsp;&nbsp;&nbsp;SEEK_CUR – mevcut konumdan offsett  
+&nbsp;&nbsp;&nbsp;&nbsp;SEEK_END – dosyanın sonundan ofsett  
+- Dosyanın başlangıcında veya hata durumunda offsett -1 döndürür.
+
+### lseek() örnekler
+
+Standart girişin aranıp aranmayacağını test edelim.  
+
+int main(void) {  
+if (lseek(STDIN_FILENO, 0, SEEK_CUR)==-1)   
+&nbsp;&nbsp;&nbsp;&nbsp;printf("cannot seek\n");  
+else  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("seek OK\n");  
+exit(0);  
+}  
+
+a.out < /etc/motd “seek OK ” verir.  
+$ cat < /etc/motd | a.out “cannot seek” verir  
+$ a.out < /var/spool/cron/FIFO “cannot seek” verir  
+
+</br>
+
+char buf1[] = "abcdefghij“, buf2[] = "ABCDEFGHIJ";  
+int fd = creat("file.hole", FILE_MODE);  
+write(fd, buf1, 10);  
+lseek(fd, 40, SEEK_SET);  
+write(fd, buf2, 10);  
+
+a.out  
+$ ls -l file.hole  &nbsp;&nbsp;&nbsp;&nbsp; boyutunu kontrol et  
+-rw-r--r-- 1 root 50 Jul 31 05:50 file.hole  
+
+$ od -c file.hole  &nbsp;&nbsp;&nbsp;&nbsp; gerçek içeriğine bakalım  
+(foto)  
+
 
 ## Bölüm-12 Süreç Yönetimi (Process Management)
 
