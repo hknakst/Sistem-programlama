@@ -2186,5 +2186,203 @@ Ara dosyaları(intermediate) kaldırmanın bir yolunu dahil edin.
 
 (pek yakında...) 
 
-## Bölüm-11 Süreç Yönetimi (Process Management)
+## Bölüm-11 Dosya yönetimi (File Management)
+
+(pek yakında...) 
+
+## Bölüm-12 Süreç Yönetimi (Process Management)
+
+
+### Unix'te süreçler
+
+Süreç(process): Temel yürütme birimi  
+- Bir programın çalıştırılması
+- Bir süreç kimliğine sahiptir (PID)
+- Bir süreç hiyerarşisinde oluşurlar (parents and children)
+- Root(kök) başlangıç sürecidir.
+- Her sürecin kendi durumu/içeriği/belleği vardır.
+
+Süreçler ile ilgili shell komutları:  
+ps, top, kill, nice,...
+
+### süreç belirtmek
+
+(foto gelecek)
+
+### Dosya Nesneleri ve Dosya Tanımlayıcıları
+
+Stdio kütüphanesi, arabellek(buffering) kullanan FILE nesneleri sağlar.
+
+- FILE *stdin, *stdout, *stderr;  
+
+Neden arabelleğe alma? Verimlilik.  
+FILE nesneleri, dosya tanımlayıcıların üzerine inşa edilmiştir.  
+Süreç yönetimi görevleri için dosya tanımlayıcılarını kullanacağız.  
+
+### Ara belleğe alma(Buffering)
+
+- un-buffered(ara belleğe alınmamış):çıktı hemen görünür  
+&nbsp;&nbsp;&nbsp;&nbsp; stderr arabelleğe alınmaz
+- line buffered(satır ara belleğe alınmış):  tam bir satır yazıldığı zaman çıktı görüntülenir.  
+&nbsp;&nbsp;&nbsp;&nbsp; stdout, ekrana giderken arabelleğe alınan satırdır
+- block buffered(blok ara belleğe alınmış): bir tampon doldurulduğunda veya bir tampon temizlendiğinde çıktı görünür.  
+&nbsp;&nbsp;&nbsp;&nbsp;normalde bir dosyaya çıkış blok arabelleğe alınır.  
+&nbsp;&nbsp;&nbsp;&nbsp;stdout bir dosyaya yönlendirildiğinde arabelleğe alınmış bloktur.
+
+
+### Dosya tanımlayıcıları
+
+Düşük seviye I / O tarafından kullanılır:  
+- open(), close(), read(), write()  
+
+Bir tam sayı gibi tanımlanır.
+- int fd;  
+
+Bir FILE nesnesini fd'ye dönüştürmek için kullanışlı bir sistem çağrısı.  
+- int fileno( FILE *fp);
+
+Elbette bir dosya tanıtıcısına bir akış arayüzü atamak mümkündür.  
+- FILE *fdopen(int fd, const char *mode);  
+
+### Süreç Yönetimi Sorunları
+
+Sistem, aşağıdakilerle ilgilenmektedir:
+  - Bir süreç oluşturmak
+  - Programın ayarlanması bir süreç yürütür
+  - Bir i sonlandırılması bekleniyor
+  - Bir süreçin sonlandırılması.
+  - Bir süreçe sinyal gönderme.
+  - süreçler arasında iletişim kurmak
+
+
+### Unix'i başlatma
+
+(foto gelecek)  
+
+Hangi süreçlerin çalıştını görmek için: "top" , "ps -aux" komutlarını çalıştırın.  
+
+Yeni bir işlem oluşturmanın tek yolu mevcut bir işlemi kopyalamaktır. Bu nedenle tüm işlemlerin atası pid = 1 ile başlatılır.
+
+### Csh komutları nasıl çalıştırır?
+
+(foto gelecek)  
+
+- Bir komut yazıldığında, csh fork olur(yeni süreç doğurma) ve sonra yazılan komutu yürütür.
+- fork'dan(çatallanma) sonra, dosya tanımlayıcıları 0, 1 ve 2, yeni süreçde hala stdin, stdout ve stderr'ye başvurur.
+- Kurallara göre, yürütülen program bu tanımlayıcıları uygun şekilde kullanacaktır.
+
+(foto)
+
+### Süreç oluşturma 
+
+- fork sistemi çağrısı, çalışmakta olan programın bir kopyasını oluşturur.
+- Kopya (child süreç) ve orijinal (parent süreç) her ikisi de fork noktasından aynı verilerle devam eder.
+- Tek fark, fork çağrısından dönüş(return) değeridir.
+
+### Fork : PID'ler ve PPID'ler
+
+- Sistem çağrısı: int fork()
+-fork() başarılı olursa, çocuk(child) PID'yi ebeveynine(parent) ve 0 değerini çocuğa döndürür;
+- fork() başarısız olursa, parent'a -1 döndürür (alt öğe oluşturulmaz)
+- İlgili sistem çağrıları:  
+&nbsp;&nbsp;&nbsp;&nbsp;int getpid() - geçerli süreçin PID değerini döndürür  
+&nbsp;&nbsp;&nbsp;&nbsp;int getppid() - parent süreçinin PID değerini döndürür (1'in ppid değeri 1'dir)  
+&nbsp;&nbsp;&nbsp;&nbsp;int getpgrp() - geçerli sürecin grup ID'sini döndürür  
+
+
+### fork() başarısız olduğunda
+
+İki olası sebep:  
+Bir kullanıcının oluşturabileceği maksimum işlem sayısının bir sınırı vardır.Bu sınıra ulaşıldığında (yani, işlem tablosu dolu), daha sonraki fork() çağrıları -1 değerini döndürür.  
+
+Çekirdek işlemlere sanal bellek ayırır Belleği yetersiz kaldığında, fork çağrıları başarısız olur.
+
+### fork () özellikleri
+
+Çocuk tarafından ebeveynden miras alınan özellikler:  
+- UID, GID
+- kontrol terminali
+- CWD, kök dizini
+- sinyal maskesi, çevre, kaynak sınırları
+- paylaşılan bellek segmentleri  
+
+Ebeveyn ve çocuk arasındaki farklar:  
+- PID, PPID, fork()'dan dönüş değeri
+- Bekleyen alarmlar çocuk için silindi.
+- Çocuk için bekleyen sinyaller silinir.
+
+fork örneği:  
+
+int i, pid;  
+i = 5;  
+printf(“%d\n”, i);  
+pid = fork();  
+if(pid != 0)  
+&nbsp;&nbsp;&nbsp;&nbsp;i = 6; /* sadece parent buraya gelir */  
+else  
+&nbsp;&nbsp;&nbsp;&nbsp;i = 4; /* sadece child buraya gelir */  
+printf(“%d\n”, i);    
+
+(foto gelecek)  
+
+
+PID/PPID örneği:  
+
+\#include <stdio.h>  
+\#include <unistd.h>  
+int main(void) {  
+int pid;  
+printf("ORIG: PID=%d PPID=%d\n",getpid(), getppid());  
+pid = fork();  
+if(pid != 0)  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("PARENT: PID=%d PPID=%d\n",getpid(), getppid());  
+else  
+&nbsp;&nbsp;&nbsp;&nbsp;printf("CHILD: PID=%d PPID=%d\n",getpid(), getppid());  
+return(1);  
+}  
+
+çıktı:  
+ORIG: PID=27989 PPID=27167  
+PARENT: PID=27989 PPID=27167  
+CHILD: PID=27990 PPID=27989  
+
+
+### Program Yürütme (Executing a Program)
+
+- Exec sistem çağrısı, bir süreç tarafından yürütülen programın yerine farklı bir program koyar.
+- Yeni program baştan yürütmeye başlar.
+Başarı durumunda, exec asla geri değer döndürmez, başarısızlık durumunda exec -1 döndürür.
+
+(foto gelecek)
+
+Örnek:   
+
+Program X:  
+int i = 5;  
+printf("%d\n", i);  
+exec(“Y”);  
+printf("%d\n", i);  
+
+Program Y:   
+printf("hello\n");  
+
+### exec() özellikleri
+
+Yeni süreç çağrılan sürecinden aşağıdakileri miras alır:  
+- PID ve PPID, gerçek UID, GID, oturum ID.
+- kontrol terminali.
+- CWD, kök dizini, kaynak limitleri.
+- süreç sinyali maskesi.
+- Bekleyen sinyaller
+- Bekleyen alarmlar
+- dosya modu oluşturma maskesi (umask).
+- dosya kilitleri. 
+
+altı versiyon exec():  
+- execl(char *path, char *arg0, ..., (char *)0);
+- execv(char *path, char *argv[]);
+- execle(char *path, char *arg0, ..., (char *)0,char *envp[]);
+- execve(char *pathname, char *argv[], char *envp[]);
+- execlp(char *file, char *arg0, ..., (char *)0);
+- execvp(char *file, char *argv[]);
 &nbsp;&nbsp;&nbsp;&nbsp;
