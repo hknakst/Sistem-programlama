@@ -937,7 +937,7 @@ Kabuk betiği(Shell script), kabuk yorumlaması için mantık içeren bir metin 
 http://www.faqs.org/faqs/unix-faq/shell/shell-differences/ </br>
 
 ### Kabuk Özellikleri. 
-(foto) burası güncellenecek :\)
+![foto1](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-6/photo1.png)
 
 ### Bourne Again SHell (bash)
 
@@ -2005,7 +2005,7 @@ Derleme (*.o) and bağlama.
 
 ### Derleme şüreci
 
-(foto gelecek)
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-9/photo1.png)
 
 ### Temel g++ Örnekleri
 
@@ -2090,7 +2090,7 @@ user.o : user.cpp mydb.h
 database.o : database.cpp mydb.h  
 &nbsp;&nbsp;&nbsp;&nbsp;g++ -c database.cpp  
 
-(foto)  
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-9/photo2.png)
 
 
 ### Bir Makefile'ın parçaları
@@ -2105,7 +2105,7 @@ Komutlar:
 - her zaman bir çıkıntıyla(tab) başla
 - bağımlılığı karşılamak için komutlar
 
-(foto)
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-9/photo3.png)
 
 ### Makrolar(macros) ve özel değişkenler
 
@@ -2399,7 +2399,7 @@ $ ls -l file.hole  &nbsp;&nbsp;&nbsp;&nbsp; boyutunu kontrol et
 -rw-r--r-- 1 root 50 Jul 31 05:50 file.hole  
 
 $ od -c file.hole  &nbsp;&nbsp;&nbsp;&nbsp; gerçek içeriğine bakalım  
-(foto)  
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-11/photo1.png) 
 
 
 ## Bölüm-12 Süreç Yönetimi (Process Management)
@@ -2419,7 +2419,7 @@ ps, top, kill, nice,...
 
 ### süreç belirtmek
 
-(foto gelecek)
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo1.png) 
 
 ### Dosya Nesneleri ve Dosya Tanımlayıcıları
 
@@ -2469,7 +2469,7 @@ Sistem, aşağıdakilerle ilgilenmektedir:
 
 ### Unix'i başlatma
 
-(foto gelecek)  
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo2.png) 
 
 Hangi süreçlerin çalıştını görmek için: "top" , "ps -aux" komutlarını çalıştırın.  
 
@@ -2477,13 +2477,13 @@ Yeni bir işlem oluşturmanın tek yolu mevcut bir işlemi kopyalamaktır. Bu ne
 
 ### Csh komutları nasıl çalıştırır?
 
-(foto gelecek)  
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo3.png)   
 
 - Bir komut yazıldığında, csh fork olur(yeni süreç doğurma) ve sonra yazılan komutu yürütür.
 - fork'dan(çatallanma) sonra, dosya tanımlayıcıları 0, 1 ve 2, yeni süreçde hala stdin, stdout ve stderr'ye başvurur.
 - Kurallara göre, yürütülen program bu tanımlayıcıları uygun şekilde kullanacaktır.
 
-(foto)
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo4.png) 
 
 ### Süreç oluşturma 
 
@@ -2535,8 +2535,7 @@ else
 &nbsp;&nbsp;&nbsp;&nbsp;i = 4; /* sadece child buraya gelir */  
 printf(“%d\n”, i);    
 
-(foto gelecek)  
-
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo5.png) 
 
 PID/PPID örneği:  
 
@@ -2565,7 +2564,7 @@ CHILD: PID=27990 PPID=27989
 - Yeni program baştan yürütmeye başlar.
 Başarı durumunda, exec asla geri değer döndürmez, başarısızlık durumunda exec -1 döndürür.
 
-(foto gelecek)
+![foto2](https://github.com/hknakst/Sistem-programlama/blob/master/photos/b%C3%B6l%C3%BCm-12/photo6.png) 
 
 Örnek:   
 
