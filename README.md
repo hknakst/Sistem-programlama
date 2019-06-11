@@ -1,4 +1,7 @@
 # Sistem-programlama
+## İçindekiler
+[TOC]
+
 ## Bölüm-1 Giriş
 ### neden Unix?
  modern bir işletim sistemi;
@@ -54,7 +57,7 @@ Dosya içersine yazdığımız kodların hangi bash'in koşacağını belirtmek 
 Dosyanın hangi shell ile koşacağını belirtmek için;
 - #!/bin/bash
 
-#!:Bir script dosyasının ilk satırı bu iki karakterle başlamalıdır. Shebang olarak ifade edilen bu karakterlerden hemen sonra, boşluk bırakmadan hangi bash programı kullanılacaksa o programın mutlak adresi yazılır.
+\#!:Bir script dosyasının ilk satırı bu iki karakterle başlamalıdır. Shebang olarak ifade edilen bu karakterlerden hemen sonra, boşluk bırakmadan hangi bash programı kullanılacaksa o programın mutlak adresi yazılır.
 
 /bin/bash: Burada belirtilmesi gereken diğer bir konu da sisteminizde hangi bash yazılımını kullandığınızdır. which bash komutunun sonucu size mutlak adresi söyleyecektir. #! ifadesinden sonra herhangi bir bash adresi yazmasanız da Script çalışabilir. Fakat sizin yazdığınız Script başka bir sistemde çalıştırılmak istendiğinde hata verme ihtimali vardır. Bu sebeple bash adresini yazmayı alışkanlık haline getirmek daha sağlıklı olacaktır.
 
@@ -2597,3 +2600,12 @@ altı versiyon exec():
 - execlp(char *file, char *arg0, ..., (char *)0);
 - execvp(char *file, char *argv[]);
 &nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+
+
+
+
+
